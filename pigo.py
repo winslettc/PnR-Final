@@ -61,6 +61,18 @@ class Pigo(object):
     ##DANCING IS FOR THE CHILD CLASS
     def dance(self):
         print('Parent dance is lame.')
+        for x in range(self.MIDPOINT-20, self.MIDPOINT+20, 5):
+            servo(x)
+            time.sleep(.1)
+        self.encB(5)
+        self.encR(5)
+        self.encL(5)
+        self.encF(5)
+        for x in range(self.MIDPOINT-20, self.MIDPOINT+20, 10):
+            servo(x)
+            time.sleep(.1)
+
+
 
     ########################################
     ##### FUNCTIONS NOT INTENDED TO BE OVERWRITTEN
@@ -80,6 +92,12 @@ class Pigo(object):
         print('Moving '+str((enc/18))+' rotation(s) left')
         enc_tgt(1, 1, enc)
         left_rot()
+        time.sleep((enc/18)*1.8)
+
+    def encB(self, enc):
+        print('Moving '+str((enc/18))+ ' rotations(s) backwards')
+        enc_tgt(1, 1, enc)
+        bwd()
         time.sleep((enc/18)*1.8)
 
     #HELP STUDENTS LEARN HOW TO PORTION ENCODE VALUES
