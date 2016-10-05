@@ -81,24 +81,28 @@ class Pigo(object):
         enc_tgt(1, 1, enc)
         fwd()
         time.sleep((enc/18)*1.8)
+        stop()
 
     def encR(self, enc):
         print('Moving '+str((enc/18))+' rotation(s) right')
         enc_tgt(1, 1, enc)
         right_rot()
         time.sleep((enc/18)*1.8)
+        stop()
 
     def encL(self, enc):
         print('Moving '+str((enc/18))+' rotation(s) left')
         enc_tgt(1, 1, enc)
         left_rot()
         time.sleep((enc/18)*1.8)
+        stop()
 
     def encB(self, enc):
         print('Moving '+str((enc/18))+ ' rotations(s) backwards')
         enc_tgt(1, 1, enc)
         bwd()
         time.sleep((enc/18)*1.8)
+        stop()
 
     #HELP STUDENTS LEARN HOW TO PORTION ENCODE VALUES
     def rotate(self):
