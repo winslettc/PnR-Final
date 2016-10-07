@@ -32,7 +32,7 @@ class GoPiggy(pigo.Pigo):
         menu = {"1": ("Navigate forward", self.nav),
                 "2": ("Rotate", self.rotate),
                 "3": ("Dance", self.dance),
-                "4": ("Calibrate servo", self.calibrate),
+                "4": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
                 "q": ("Quit", quit)
                 }
