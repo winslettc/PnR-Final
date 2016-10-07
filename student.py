@@ -47,7 +47,8 @@ class GoPiggy(pigo.Pigo):
     def dance(self):
         print("Piggy dance")
         ##### WRITE YOUR FIRST PROJECT HERE
-        for x in range(100, 200, 25):
+        x = 100
+        while self.isClear() and x <= 200:
             print('Speed is set to: ' + str(x))
             set_speed(x)
             servo(20)
@@ -57,9 +58,11 @@ class GoPiggy(pigo.Pigo):
             self.encF(5)
             servo(120)
             time.sleep(.1)
+            x += 25
 
     def status(self):
-        print("My power is at "+ volt() + " volts")
+        print("My power is at "+ str(volt()) + " volts")
+        self.encF(18)
 
 
 
