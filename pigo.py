@@ -35,6 +35,7 @@ class Pigo(object):
                 "3": ("Dance", self.dance),
                 "4": ("Calibrate", self.calibrate),
                 "5": ("Forward", self.encF),
+                "6": ("Open House Demo", self.openHouse),
                 "q": ("Quit", quit)
                 }
         for key in sorted(menu.keys()):
@@ -43,6 +44,22 @@ class Pigo(object):
         ans = input("Your selection: ")
         menu.get(ans, [None, error])[1]()
 
+    def openHouse(self):
+        while True:
+            if not self.isClear():
+                self.beShy()
+
+    def beShy(self):
+        set_speed(80)
+        self.encB(5)
+        for x in range(3):
+            servo(20)
+            time.sleep(.1)
+            servo(120)
+            time.sleep(.1)
+        self.encL(2)
+        self.encR(2)
+        self.encF(5)
 
     def nav(self):
         print("Parent nav")
@@ -230,9 +247,9 @@ class Pigo(object):
                 self.encF(9)
                 response = input("Reduce left, reduce right or done? (l/r/d): ")
                 if response == 'l':
-                    self.LEFT_SPEED -= 5
+                    self.LEFT_SPEED -= 10
                 elif response == 'r':
-                    self.RIGHT_SPEED -= 5
+                    self.RIGHT_SPEED -= 10
                 else:
                     break
 
