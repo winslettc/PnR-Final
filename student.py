@@ -47,15 +47,19 @@ class GoPiggy(pigo.Pigo):
     def dance(self):
         print("Piggy dance")
         ##### WRITE YOUR FIRST PROJECT HERE
-        x = 100
-        while self.isClear() and x <= 200:
+        print("Is it clear?")
+        for x in range(3):
+            if not self.isClear():
+                print "Omgorsh, it's not safe!"
+                break
+            x = 100
             print('Speed is set to: ' + str(x))
             set_speed(x)
             servo(20)
-            self.encB(5)
+            self.encB(7)
             self.encR(2)
             self.encL(2)
-            self.encF(5)
+            self.encF(15)
             servo(120)
             time.sleep(.1)
             x += 25
@@ -70,6 +74,12 @@ class GoPiggy(pigo.Pigo):
     def nav(self):
         print("Piggy nav")
         ##### WRITE YOUR FINAL PROJECT HERE
+        #TODO: If while loop fails, check for other paths
+
+        #loop: check that it's clear
+        while self.isClear():
+            #let's go forward just a little bit
+            self.encF(10)
 
 
 ####################################################
