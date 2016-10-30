@@ -18,8 +18,9 @@ class GoPiggy(pigo.Pigo):
     # CONSTRUCTOR
     def __init__(self):
         print("Piggy has be instantiated!")
-        # this method makes sure Piggy is looking forward
+        # this method makes sure Piggy is looking forward and drives straight
         self.calibrate()
+        self.setSpeed(self.LEFT_SPEED, self.RIGHT_SPEED)
         # let's use an event-driven model, make a handler of sorts to listen for "events"
         while True:
             self.stop()
@@ -47,27 +48,6 @@ class GoPiggy(pigo.Pigo):
     def dance(self):
         print("Piggy dance")
         ##### WRITE YOUR FIRST PROJECT HERE
-        print("Is it clear?")
-        for x in range(3):
-            if not self.isClear():
-                print "Omgorsh, it's not safe!"
-                break
-            x = 100
-            print('Speed is set to: ' + str(x))
-            set_speed(x)
-            servo(20)
-            self.encB(7)
-            self.encR(2)
-            self.encL(2)
-            self.encF(15)
-            servo(120)
-            time.sleep(.1)
-            x += 25
-
-    def status(self):
-        print("My power is at "+ str(volt()) + " volts")
-        self.encF(18)
-
 
 
     # AUTONOMOUS DRIVING

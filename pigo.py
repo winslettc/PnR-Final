@@ -22,6 +22,7 @@ class Pigo(object):
             print('------- PARENT --------')
             print('-----------------------')
             # let's use an event-driven model, make a handler of sorts to listen for "events"
+            self.setSpeed(self.LEFT_SPEED, self.RIGHT_SPEED)
             while True:
                 self.stop()
                 self.handler()
@@ -95,6 +96,14 @@ class Pigo(object):
 
     ########################################
     ##### FUNCTIONS NOT INTENDED TO BE OVERWRITTEN
+    def setSpeed(self, left, right):
+        set_left_speed(left)
+        set_right_speed(right)
+        self.LEFT_SPEED = left
+        self.RIGHT_SPEED = right
+        print('Left speed set to: '+str(left)+' // Right set to: '+str(right))
+    
+    
     def encF(self, enc):
         print('Moving '+str((enc/18))+' rotation(s) forward')
         enc_tgt(1, 1, enc)
@@ -252,6 +261,13 @@ class Pigo(object):
                     self.RIGHT_SPEED -= 10
                 else:
                     break
+    
+    #PRINTS THE CURRENT STATUS OF THE ROBOT
+    def status(self):
+        print("My power is at "+ str(volt()) + " volts")
+        print('Left speed set to: '+str(self.LEFT_SPEED)+' // Right set to: '+str(self.RIGHT_SPEED))
+        print('My MIDPOINT is set to: '+ str(self.MIDPOINT))
+        print('I get scared when things are closer than '+str(self.STOP_DIST)+'cm')
 
 ########################
 #### STATIC FUNCTIONS

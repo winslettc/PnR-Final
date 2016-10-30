@@ -1,7 +1,18 @@
 # PnR-Final
-The final project for my Programming and Robotics class
+The final project for [Gilmour Academy's](http://www.gilmour.org) Programming and Robotics class. Your job is to design a self-driving script that will safely move your GoPiGo from one side of an obstacle course to another, without hitting an object or turning around and heading the wrong way.
+ 
+The ideal solution will work quickly and will output detailed description of the robot's thinking to the SSH console. 
 
-### Methods Students Can Use
+## Useful Info
+
+All of your work will go into the **student.py** file. Your **student.py** file has `class GoPiggy` which inherits all the properties from the teacher's `class Pigo`. The parent class, Pigo, is in the **pigo.py** file. Leave that file alone. All your work is done in the **student.py** file. 
+_Why shouldn't I modify the **pigo.py** file?_
+As our project progresses, I will be updating the **pigo.py** file with helpful new methods. If you put all your work into the **student.py** file, you won't lose anything when you update **pigo.py**. And remember: your `class GoPiggy` is the child, so it overrides the `class Pigo`. So copy and paste a method from **pigo.py** to your **student.py** and make your improvements there. 
+
+
+### Custom Methods Students Can Use
+[The GoPiGo API](http://www.dexterindustries.com/GoPiGo/programming/python-programming-for-the-raspberry-pi-gopigo/) is how we speak to our robot. It's why we have `from gopigo import *` at the top of our code. You **must become familiar with the API's commands**. 
+Below are some some helpful methods. These will not be enough for you to complete your project, but I hope they will help you get started. These Pigo methods use the GoPiGo API. 
 
 `self.rotate()`
 Lets you change the encode value and choose the direction to turn. It will let you measure how many degrees each encode value will produce.
@@ -21,5 +32,11 @@ This will fill your self.scan array with distances self.MIDPOINT-60, self.MIDPOI
 `self.flushScan()`
 Resets the list that stores the distances of the ultrasonic sensor. 
 
+`self.status()`
+Prints your current power level, motor speeds, midpoint and stop distance. If one of your ideas isn't working the way you want it to, you can add a couple status updates in your code to help you see what's happening with your robot.
+
 `self.stop()`
 A more reliable stop command. It repeats the GoPiGo's stop() method three times to assure that the command is not lost. 
+
+`self.calibrate()`
+This method is built into the `class GoPiggy`'s initilization. When you first start your app, it will ask you to calibrate the midpoint and the motor speeds. *Note: The values that you receive in this method will not be saved unless you update the variables at the top of your code* 
