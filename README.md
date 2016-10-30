@@ -40,3 +40,15 @@ A more reliable stop command. It repeats the GoPiGo's stop() method three times 
 
 `self.calibrate()`
 This method is built into the `class GoPiggy`'s initilization. When you first start your app, it will ask you to calibrate the midpoint and the motor speeds. *Note: The values that you receive in this method will not be saved unless you update the variables at the top of your code* 
+
+###Want some ideas?
+* I'll start you guys off by showing you how to use `self.encF(5)` while `self.isClear()` returns True. And when that loop exits, we'll use `self.choosePath()` to tell us whether we should `encR(5)` or `encL(5)`. But this is a slow and error-prone approach. 
+* You can develop your own `def cruise(self):` method that will replace the while loop described above. Instead of inching forward, you could check the distance in front of you while driving forward. It could look something like this:
+`def cruise(self):
+    fwd()
+    while True:
+        if us_dist(15) < self.STOP_DIST:
+            break
+        time.sleep(0.05)`
+You may want to add a command to make the servo look straight at the midpoint first so it's not looking sideways while you're driving forward. 
+* Is your robot turning the wrong way a lot? You could create a new *instance variable* that keeps track of how much you've turned. You could start this variable out at 0, which represents the correct direction. If your robot uses `self.encL(x)` you add whatever `x` is to your turn variable. If you use `self.encR(x)` you could then subtract `x` from your turn variable. Then, when your robot is deciding which way to turn, you could program the robot to prefer the turn that will bring this variable closer to 0. 
