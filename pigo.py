@@ -54,7 +54,10 @@ class Pigo(object):
         else:
             while True:
                 if not self.isClear():
-                    self.encR(18)
+                    for x in range(5):
+                        self.encR(2)
+                        self.encL(2)
+                    self.encR(15)
 
     def beShy(self):
         set_speed(80)

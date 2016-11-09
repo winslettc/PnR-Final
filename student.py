@@ -3,17 +3,19 @@ import time
 import random
 from gopigo import *
 
-'''
-This class INHERITS your teacher's Pigo class. That means Mr. A can continue to
-improve the parent class and it won't overwrite your work.
-'''
 
+'''
+THIS IS THE TEACHER'S EXAMPLE. YOU (PROBABLY) SHOULD NOT BE SEEING THIS
+'''
 
 class GoPiggy(pigo.Pigo):
     # CUSTOM INSTANCE VARIABLES GO HERE. You get the empty self.scan array from Pigo
     # You may want to add a variable to store your default speed
     MIDPOINT = 90
-    STOP_DIST = 20
+    STOP_DIST = 25
+    turn_track = 0
+    #if I encR(1) how many degrees does it turn?
+    DEG_PER_ENC = 15
 
     # CONSTRUCTOR
     def __init__(self):
@@ -52,14 +54,108 @@ class GoPiggy(pigo.Pigo):
 
     # AUTONOMOUS DRIVING
     def nav(self):
-        print("Piggy nav")
-        ##### WRITE YOUR FINAL PROJECT HERE
-        #TODO: If while loop fails, check for other paths
 
-        #loop: check that it's clear
-        while self.isClear():
-            #let's go forward just a little bit
-            self.encF(10)
+        while True:
+            #Go forward while you can, look for options if you can't
+            if(self.isClear()):
+                print("It looks clear ahead of me. Starting cruise")
+                self.cruise()
+
+            #Choose the best path
+            options = self.findOptions()
+            ideal_turn = self.MIDPOINT + (self.turn_track * self.DEG_PER_ENC)
+            #if there is an option other than the filler [0]
+            if options[1]:
+                print("I've go a few options to consider")
+                best_option = options[1]
+                for x in options:
+                    if abs(x - ideal_turn) < best_option:
+                        best_option = x
+                print("My best option is at "+str(best_option)+" degrees.")
+                change = self.MIDPOINT - best_option
+                print("That means I need to turn by "+str(change)+ "degrees.")
+                if change > 0:
+                    self.encR(change * self.DEG_PER_ENC)
+                else:
+                    self.encL(abs(change) * self.DEG_PER_ENC)
+            else:
+                print("No options. Going to back up.")
+                self.encB(18)
+                if self.turn_track > 0:
+                    self.encR(self.turn_track)
+                elif self.turn_track < 0:
+                    self.encL(abs(self.turn_track))
+
+    #Drive forward as long as nothing's in the way
+    def cruise(self):
+        #aim forward
+        servo(self.MIDPOINT)
+        time.sleep(.05)
+        #start moving forward
+        fwd()
+        #start an infinite loop
+        while True:
+            #break the loop if the sensor reading is closer than our stop dist
+            if us_dist(15) < self.STOP_DIST:
+                break
+            #break every now and then
+            time.sleep(.05)
+        #stop if the sensor loop broke
+        self.stop()
+
+    #Kenny's method to identify options, builds a list of 20 deg. options
+    def findOptions(self):
+        #erase anything saved in the scan array
+        self.flushScan()
+        #move the servo, take sensor reading, and store in scan array
+        for x in range(self.MIDPOINT - 60, self.MIDPOINT + 60, 2):
+            servo(x)
+            time.sleep(.1)
+            #TODO: Add a double-check
+            self.scan[x] = us_dist(15)
+            time.sleep(.05)
+        #count will be used to find 20 degrees of contigeous open space
+        count = 0
+        #this list will keep track of windows of free space
+        option = [0]
+        #looping through the scan array to think about our options
+        for x in range(self.MIDPOINT - 60, self.MIDPOINT + 60, 2):
+            #if the distance is far enough away, count this spot
+            if self.scan[x] > self.STOP_DIST:
+                count += 1
+            #if there was a spot that wasn't safe, reset counter
+            else:
+                count = 0
+            #if we've found 10 in a row, let's bookmark the spot
+            if count > 9:
+                print("Found an option from " + str(x - 20) + " to " + str(x) + " degrees")
+                count = 0
+                option.append(x-10)
+        #we're done finding spots, now let's list the options
+        for x in option:
+            #skip the 0 option, that was just filler
+            if not x.__index__() == 0:
+                print(" Choice # " + str(x.__index__()) + " is@ " + str(x) + " degrees. ")
+        #return the list of options we've found
+        return option
+
+    #modifying the parent's turn to also track the difference from original heading
+    def encR(self, enc):
+        self.turn_track -= enc
+        if(self.turn_track > 0):
+            print("The exit is to my right by " + str(self.turn_track) + "units")
+        else:
+            print("The exit is to my left by " + str(abs(self.turn_track)) + "units")
+        super(pigo.Pigo, self).encR(enc)
+
+    def encL(self, enc):
+        self.turn_track += enc
+        if(self.turn_track > 0):
+            print("The exit is to my right by " + str(self.turn_track) + "units")
+        else:
+            print("The exit is to my left by " + str(abs(self.turn_track)) + "units")
+        super(pigo.Pigo, self).encL(enc)
+
 
 
 ####################################################
