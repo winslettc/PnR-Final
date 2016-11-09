@@ -46,9 +46,15 @@ class Pigo(object):
         menu.get(ans, [None, error])[1]()
 
     def openHouse(self):
-        while True:
-            if not self.isClear():
-                self.beShy()
+        choice = input("1) Shy;  2) Spin.. ")
+        if choice == "1":
+            while True:
+                if not self.isClear():
+                    self.beShy()
+        else:
+            while True:
+                if not self.isClear():
+                    self.encR(18)
 
     def beShy(self):
         set_speed(80)
