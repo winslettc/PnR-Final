@@ -141,20 +141,19 @@ class Pigo(object):
         time.sleep((enc/18)*1.8)
         stop()
 
-    #HELP STUDENTS LEARN HOW TO PORTION ENCODE VALUES
+    #HELP STUDENTS LEARN HOW TO PORTION TURN/SLEEP VALUES
     def rotate(self):
-        #initial encoder value = 1 wheel rotation
-        enc = 18
+        print("We tell our robot to rotate then pause the app.")
+        print("The longer the pause, the longer the turn.")
+        print("We also like to slow our robot down for the turn.")
         while True:
-            select = input('Right, left or encode? (r/l/e): ')
-            if select == 'r':
-                self.encR(enc)
-            elif select == 'l':
-                self.encL(enc)
-            elif select == 'e':
-                enc = int(input('New encode value: '))
-            else:
-                break
+            speed_adj = float(input("What modifier would you like to apply to your speed?"))
+            set_left_speed(self.LEFT_SPEED*speed_adj)
+            set_right_speed(self.RIGHT_SPEED*speed_adj)
+            turn_time = float(input("How many seconds would you like to turn? "))
+            right_rot()
+            time.sleep(turn_time)
+            self.stop()
 
     ##DUMP ALL VALUES IN THE SCAN ARRAY
     def flushScan(self):
