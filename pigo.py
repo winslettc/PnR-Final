@@ -148,8 +148,8 @@ class Pigo(object):
         print("We also like to slow our robot down for the turn.")
         while True:
             speed_adj = float(input("What modifier would you like to apply to your speed?"))
-            set_left_speed(self.LEFT_SPEED*speed_adj)
-            set_right_speed(self.RIGHT_SPEED*speed_adj)
+            set_left_speed(int(self.LEFT_SPEED*speed_adj))
+            set_right_speed(int(self.RIGHT_SPEED*speed_adj))
             turn_time = float(input("How many seconds would you like to turn? "))
             right_rot()
             time.sleep(turn_time)
