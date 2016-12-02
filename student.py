@@ -11,10 +11,10 @@ THIS IS THE TEACHER'S EXAMPLE. YOU (PROBABLY) SHOULD NOT BE SEEING THIS
 class GoPiggy(pigo.Pigo):
     # CUSTOM INSTANCE VARIABLES GO HERE. You get the empty self.scan array from Pigo
     # You may want to add a variable to store your default speed
-    MIDPOINT = 90
+    MIDPOINT = 78
     STOP_DIST = 25
-    LEFT_SPEED = 190
-    RIGHT_SPEED = 190
+    LEFT_SPEED = 150
+    RIGHT_SPEED = 150
 
     #0.0 is the heading of the exit, every turn changes this number
     turn_track = 0.0
@@ -25,7 +25,6 @@ class GoPiggy(pigo.Pigo):
     def __init__(self):
         print("Piggy has be instantiated!")
         # this method makes sure Piggy is looking forward and drives straight
-        self.calibrate()
         self.setSpeed(self.LEFT_SPEED, self.RIGHT_SPEED)
         # let's use an event-driven model, make a handler of sorts to listen for "events"
         while True:
