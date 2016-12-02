@@ -13,9 +13,13 @@ class GoPiggy(pigo.Pigo):
     # You may want to add a variable to store your default speed
     MIDPOINT = 90
     STOP_DIST = 25
-    turn_track = 0
-    #if I encR(1) how many degrees does it turn?
-    DEG_PER_ENC = 15
+    LEFT_SPEED = 190
+    RIGHT_SPEED = 190
+
+    #0.0 is the heading of the exit, every turn changes this number
+    turn_track = 0.0
+    TIME_PER_DEGREE = 0.011
+    TURN_MODIFIER = .5
 
     # CONSTRUCTOR
     def __init__(self):
@@ -51,40 +55,112 @@ class GoPiggy(pigo.Pigo):
         print("Piggy dance")
         ##### WRITE YOUR FIRST PROJECT HERE
 
+    ########################
+    ###MY NEW TURN METHODS because encR and encL just don't cut it
+    ########################
+    #takes number of degress and turns right accordingly
+    def turnR(self, deg):
+        #blah blah blah
+        self.turn_track += deg
+        print("The exit is " + str(self.turn_track) + " degrees away.")
+        self.setSpeed(self.LEFT_SPEED * self.TURN_MODIFIER,
+                      self.RIGHT_SPEED * self.TURN_MODIFIER)
+        right_rot()
+        time.sleep(deg * self.TIME_PER_DEGREE)
+        self.stop()
+        self.setSpeed(self.LEFT_SPEED, self.RIGHT_SPEED)
 
-    # AUTONOMOUS DRIVING
+    def turnL(self, deg):
+        #adjust the tracker so we know how many degrees away our exit is
+        self.turn_track -= deg
+        print("The exit is " + str(self.turn_track) + " degrees away.")
+        #slow down for more exact turning
+        self.setSpeed(self.LEFT_SPEED * self.TURN_MODIFIER,
+                      self.RIGHT_SPEED * self.TURN_MODIFIER)
+        #do turn stuff
+        left_rot()
+        #use our experiments to calculate the time needed to turn
+        time.sleep(deg*self.TIME_PER_DEGREE)
+        self.stop()
+        #return speed to normal cruise speeds
+        self.setSpeed(self.LEFT_SPEED, self.RIGHT_SPEED)
+
+
+
+    def setSpeed(self, left, right):
+        print("Left speed: " + str(left))
+        print("Right speed: " + str(right))
+        set_left_speed(int(left))
+        set_right_speed(int(right))
+        time.sleep(.05)
+
+    # Explain the purpose of the method
+    # Central logic loop of my navigation
     def nav(self):
+        print("Parent nav")
 
+        # main app loop
         while True:
-            #Go forward while you can, look for options if you can't
-            if(self.isClear()):
-                print("It looks clear ahead of me. Starting cruise")
+            # CRUISE FORWARD
+            if self.isClear():
                 self.cruise()
+            # IF I HAD TO STOP, PICK A BETTER PATH
+            turn_target = self.kenny()
 
-            #Choose the best path
-            options = self.findOptions()
-            ideal_turn = self.MIDPOINT + (self.turn_track * self.DEG_PER_ENC)
-            #if there is an option other than the filler [0]
-            if options[1]:
-                print("I've go a few options to consider")
-                best_option = options[1]
-                for x in options:
-                    if abs(x - ideal_turn) < best_option:
-                        best_option = x
-                print("My best option is at "+str(best_option)+" degrees.")
-                change = self.MIDPOINT - best_option
-                print("That means I need to turn by "+str(change)+ "degrees.")
-                if change > 0:
-                    self.encR(change * self.DEG_PER_ENC)
-                else:
-                    self.encL(abs(change) * self.DEG_PER_ENC)
+            if turn_target < 0:
+                self.turnR(abs(turn_target))
             else:
-                print("No options. Going to back up.")
-                self.encB(18)
-                if self.turn_track > 0:
-                    self.encR(self.turn_track)
-                elif self.turn_track < 0:
-                    self.encL(abs(self.turn_track))
+                self.turnL(turn_target)
+
+    # replacement turn method. Find the best option to turn
+    def kenny(self):
+        # use the built-in wideScan
+        self.wideScan()
+        # count will keep track of contigeous positive readings
+        count = 0
+        # list of all the open paths we detect
+        option = [0]
+        SAFETY_BUFFER = 30
+        # what increment do you have your widescan set to?
+        INC = 2
+
+        #############################################################
+        ################### BUILD THE OPTIONS
+        #############################################################
+        for x in range(self.MIDPOINT - 60, self.MIDPOINT + 60):
+            if self.scan[x]:
+                # add 30 if you want, this is an extra safety buffer
+                if self.scan[x] > (self.STOP_DIST + SAFETY_BUFFER):
+                    count += 1
+                # if this reading isn't safe...
+                else:
+                    # aww nuts, I have to reset the count, this path won't work
+                    count = 0
+                if count == (20 / INC):
+                    # SUCCESS! I've found enough positive readings in a row to count
+                    print("Found an option from " + str(x - 20) + " to " + str(x))
+                    count = 0
+                    option.append(x - 10)
+
+        ###############################################################
+        ################### PICK FROM THE OPTIONS
+        ###############################################################
+        bestoption = 90
+        winner = 0
+        for x in option:
+            # skip our filler option. Behold the magenta!
+            if not x.__index__() == 0:
+                print("Choice # " + str(x.__index__()) + " is@ " + str(x) + " degrees")
+                ideal = self.turn_track + self.MIDPOINT
+                print("My ideal choice would be " + str(ideal))
+                if bestoption > abs(ideal - x):
+                    bestoption = abs(ideal - x)
+                    winner = x - self.MIDPOINT
+        if winner > 0:
+            print("I think we should turn left by " + winner)
+        else:
+            print("I think we should turn right by " + abs(winner))
+        return winner
 
     #Drive forward as long as nothing's in the way
     def cruise(self):
@@ -138,23 +214,6 @@ class GoPiggy(pigo.Pigo):
                 print(" Choice # " + str(x.__index__()) + " is@ " + str(x) + " degrees. ")
         #return the list of options we've found
         return option
-
-    #modifying the parent's turn to also track the difference from original heading
-    def encR(self, enc):
-        self.turn_track -= enc
-        if(self.turn_track > 0):
-            print("The exit is to my right by " + str(self.turn_track) + "units")
-        else:
-            print("The exit is to my left by " + str(abs(self.turn_track)) + "units")
-        super(pigo.Pigo, self).encR(enc)
-
-    def encL(self, enc):
-        self.turn_track += enc
-        if(self.turn_track > 0):
-            print("The exit is to my right by " + str(self.turn_track) + "units")
-        else:
-            print("The exit is to my left by " + str(abs(self.turn_track)) + "units")
-        super(pigo.Pigo, self).encL(enc)
 
 
 

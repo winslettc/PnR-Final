@@ -71,21 +71,71 @@ class Pigo(object):
         self.encR(2)
         self.encF(5)
 
+    #Explain the purpose of the method
+    #Central logic loop of my navigation
     def nav(self):
         print("Parent nav")
+
+        #main app loop
         while True:
-            choice = self.choosePath()
-            if choice == "fwd":
-                self.encF(18)
-                while self.isClear():
-                    self.encF(18)
-            elif choice == "right":
-                self.encR(6)
-            elif choice == "left":
-                self.encL(6)
+            #CRUISE FORWARD
+            if self.isClear():
+                self.cruise()
+            #IF I HAD TO STOP, PICK A BETTER PATH
+            turn_target = self.kenny()
+
+            if turn_target < 0:
+                self.turnR(abs(turn_target))
             else:
-                print("Can't find a path ahead.")
-                break
+                self.turnL(turn_target)
+
+
+    #replacement turn method. Find the best option to turn
+    def kenny(self):
+        #use the built-in wideScan
+        self.wideScan()
+        #count will keep track of contigeous positive readings
+        count = 0
+        #list of all the open paths we detect
+        option = [0]
+        SAFETY_BUFFER = 30
+        #what increment do you have your widescan set to?
+        INC = 2
+
+        #############################################################
+        ################### BUILD THE OPTIONS
+        #############################################################
+        for x in range(self.MIDPOINT - 60, self.MIDPOINT + 60):
+            if self.scan[x]:
+                #add 30 if you want, this is an extra safety buffer
+                if self.scan[x] > (self.STOP_DIST + SAFETY_BUFFER):
+                    count += 1
+                #if this reading isn't safe...
+                else:
+                    #aww nuts, I have to reset the count, this path won't work
+                    count = 0
+                if count == (20/INC):
+                    #SUCCESS! I've found enough positive readings in a row to count
+                    print("Found an option from " + str(x - 20) + " to " + str(x))
+                    count = 0
+                    option.append(x - 10)
+
+        ###############################################################
+        ################### PICK FROM THE OPTIONS
+        ###############################################################
+        bestoption = 90
+        winner = 0
+        for x in option:
+            #skip our filler option. Behold the magenta!
+            if not x.__index__() == 0:
+                print("Choice # " + str(x.__index__()) + " is@ " + str(x) + " degrees")
+                ideal = self.turn_track + self.MIDPOINT
+                print("My ideal choice would be " + str(ideal))
+                if bestoption > abs(ideal - x):
+                    bestoption = abs(ideal - x)
+                    winner = x - self.MIDPOINT
+        return winner
+
 
     ##DANCING IS FOR THE CHILD CLASS
     def dance(self):
