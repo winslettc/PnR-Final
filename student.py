@@ -11,7 +11,7 @@ THIS IS THE TEACHER'S EXAMPLE. YOU (PROBABLY) SHOULD NOT BE SEEING THIS
 class GoPiggy(pigo.Pigo):
     # CUSTOM INSTANCE VARIABLES GO HERE. You get the empty self.scan array from Pigo
     # You may want to add a variable to store your default speed
-    MIDPOINT = 78
+    MIDPOINT = 88
     STOP_DIST = 25
     LEFT_SPEED = 150
     RIGHT_SPEED = 150
