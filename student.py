@@ -157,9 +157,9 @@ class GoPiggy(pigo.Pigo):
                     bestoption = abs(ideal - x)
                     winner = x - self.MIDPOINT
         if winner > 0:
-            print("I think we should turn left by " + winner)
+            print("I think we should turn left by " + str(winner))
         else:
-            print("I think we should turn right by " + abs(winner))
+            print("I think we should turn right by " + str(abs(winner)))
         return winner
 
     #Drive forward as long as nothing's in the way
