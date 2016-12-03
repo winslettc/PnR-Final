@@ -16,17 +16,17 @@ class GoPiggy(pigo.Pigo):
     ########################
 
     #Our servo turns the sensor. What angle of the servo( ) method sets it straight?
-    MIDPOINT = 88
+    MIDPOINT = 83
     #YOU DECIDE: How close can an object get (cm) before we have to stop?
     STOP_DIST = 25
     #YOU DECIDE: What left motor power helps straighten your fwd()?
-    LEFT_SPEED = 150
+    LEFT_SPEED = 130
     #YOU DECIDE: What left motor power helps straighten your fwd()?
-    RIGHT_SPEED = 150
+    RIGHT_SPEED = 140
     #YOU DECIDE: How long does it take your robot to turn 1 degree?
-    TIME_PER_DEGREE = 0.011
+    TIME_PER_DEGREE = 0.019
     #YOU DECIDE: What speed modifier should we use when turning?
-    TURN_MODIFIER = .5
+    TURN_MODIFIER = .6
     #This one isn't capitalized because it changes during runtime, the others don't
     turn_track = 0
     #Our scan list! The index will be the degree and it will store distance
@@ -138,6 +138,8 @@ class GoPiggy(pigo.Pigo):
             if self.isClear():
                 # drive until something's in front of me. Good idea? you decide.
                 self.cruise()
+            #YOU DECIDE: check to see if you should backup?
+            self.backUp()
             # IF I HAD TO STOP, PICK A BETTER PATH
             turn_target = self.kenny()
             # a positive turn is right
@@ -165,6 +167,13 @@ class GoPiggy(pigo.Pigo):
             time.sleep(.05)
         # stop if the sensor loop broke
         self.stop()
+
+    def backUp(self):
+        if us_dist(15) < 10:
+            print("Too close. Backing up for half a second")
+            bwd()
+            time.sleep(.5)
+            self.stop()
 
     #################################
     ### THE KENNY METHOD OF SCANNING - experimental
@@ -261,7 +270,7 @@ class GoPiggy(pigo.Pigo):
     #This returns true or false
     def isClear(self) -> bool:
         #YOU DECIDE: What range from our midpoint should we check?
-        for x in range((self.MIDPOINT - 15), (self.MIDPOINT + 15), 5):
+        for x in range((self.MIDPOINT - 20), (self.MIDPOINT + 20), 4):
             #move the sensor
             servo(x)
             #Give a little time to turn the servo
