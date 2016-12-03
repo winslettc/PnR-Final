@@ -140,13 +140,13 @@ class GoPiggy(pigo.Pigo):
                 self.cruise()
             # IF I HAD TO STOP, PICK A BETTER PATH
             turn_target = self.kenny()
-            # negative degrees mean right
-            if turn_target < 0:
-                #let's remove the negative with abs()
-                self.turnR(abs(turn_target))
-            # positive degrees mean left
+            # a positive turn is right
+            if turn_target > 0:
+                self.turnR(turn_target)
+            # negative degrees mean left
             else:
-                self.turnL(turn_target)
+                # let's remove the negative with abs()
+                self.turnL(abs(turn_target))
 
     # This method drives forward as long as nothing's in the way
     def cruise(self):
@@ -196,8 +196,7 @@ class GoPiggy(pigo.Pigo):
                 #YOU DECIDE: Is 20 degrees the right size to consider as a safe window?
                 if count == (20 / INC):
                     # SUCCESS! I've found enough positive readings in a row
-                    print("\n---FOUND OPTION: from " + str(x - 20) + " to " + str(x))
-                    print("")
+                    print("---FOUND OPTION: from " + str(x - 20) + " to " + str(x))
                     #set the counter up again for next time
                     count = 0
                     #add this option to the list
@@ -209,13 +208,14 @@ class GoPiggy(pigo.Pigo):
         #The biggest angle away from our midpoint we could possibly see is 90
         bestoption = 90
         #the turn it would take to get us aimed back toward the exit - experimental
-        ideal = self.turn_track + self.MIDPOINT
+        ideal = -self.turn_track
         print("\nTHINKING. Ideal turn: " + str(ideal) + " degrees\n")
+        # x will iterate through all the angles of our path options
         for x in option:
             # skip our filler option
             if x != 0:
-                # the difference between this path and the direction the robot is facing
-                turn = x - self.MIDPOINT
+                # the change to the midpoint needed to aim at this path
+                turn = self.MIDPOINT - x
                 # state our logic so debugging is easier
                 print("\nPATH @  " + str(x) + " degrees means a turn of " + str(turn))
                 # if this option is closer to our ideal than our current best option...
@@ -223,9 +223,9 @@ class GoPiggy(pigo.Pigo):
                     # store this turn as the best option
                     bestoption = turn
         if bestoption > 0:
-            input("\nABOUT TO TURN LEFT BY: " + str(bestoption) + " degrees")
+            input("\nABOUT TO TURN RIGHT BY: " + str(bestoption) + " degrees")
         else:
-            input("\nABOUT TO TURN RIGHT BY: " + str(abs(bestoption)) + " degrees")
+            input("\nABOUT TO TURN LEFT BY: " + str(abs(bestoption)) + " degrees")
         return bestoption
 
     #########################################
