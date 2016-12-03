@@ -20,7 +20,7 @@ class GoPiggy(pigo.Pigo):
     #YOU DECIDE: How close can an object get (cm) before we have to stop?
     STOP_DIST = 25
     #YOU DECIDE: What left motor power helps straighten your fwd()?
-    LEFT_SPEED = 130
+    LEFT_SPEED = 140
     #YOU DECIDE: What left motor power helps straighten your fwd()?
     RIGHT_SPEED = 140
     #YOU DECIDE: How long does it take your robot to turn 1 degree?
@@ -203,14 +203,14 @@ class GoPiggy(pigo.Pigo):
                 else:
                     # aww nuts, I have to reset the count, this path won't work
                     count = 0
-                #YOU DECIDE: Is 20 degrees the right size to consider as a safe window?
-                if count == (20 / INC):
+                #YOU DECIDE: Is 16 degrees the right size to consider as a safe window?
+                if count > (16 / INC) - 1:
                     # SUCCESS! I've found enough positive readings in a row
-                    print("---FOUND OPTION: from " + str(x - 20) + " to " + str(x))
+                    print("---FOUND OPTION: from " + str(x - 16) + " to " + str(x))
                     #set the counter up again for next time
                     count = 0
                     #add this option to the list
-                    option.append(x - 10)
+                    option.append(x - 8)
 
         ####################################
         ############## PICK FROM THE OPTIONS - experimental
