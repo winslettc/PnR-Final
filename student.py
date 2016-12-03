@@ -24,7 +24,7 @@ class GoPiggy(pigo.Pigo):
     #YOU DECIDE: What left motor power helps straighten your fwd()?
     RIGHT_SPEED = 140
     #YOU DECIDE: How long does it take your robot to turn 1 degree?
-    TIME_PER_DEGREE = 0.019
+    TIME_PER_DEGREE = 0.029
     #YOU DECIDE: What speed modifier should we use when turning?
     TURN_MODIFIER = .6
     #This one isn't capitalized because it changes during runtime, the others don't
@@ -152,6 +152,7 @@ class GoPiggy(pigo.Pigo):
 
     # This method drives forward as long as nothing's in the way
     def cruise(self):
+        # Extra credit: Upgrade this so it looks around while driving
         # Use the GoPiGo API's method to aim the sensor forward
         servo(self.MIDPOINT)
         #give the robot time to move
