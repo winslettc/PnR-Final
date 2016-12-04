@@ -18,7 +18,7 @@ class GoPiggy(pigo.Pigo):
     #Our servo turns the sensor. What angle of the servo( ) method sets it straight?
     MIDPOINT = 83
     #YOU DECIDE: How close can an object get (cm) before we have to stop?
-    STOP_DIST = 25
+    STOP_DIST = 30
     #YOU DECIDE: What left motor power helps straighten your fwd()?
     LEFT_SPEED = 140
     #YOU DECIDE: What left motor power helps straighten your fwd()?
@@ -195,6 +195,7 @@ class GoPiggy(pigo.Pigo):
         ######### BUILD THE OPTIONS
         #loop from the 60 deg right of our middle to 60 deg left of our middle
         for x in range(self.MIDPOINT - 60, self.MIDPOINT + 60):
+            # ignore all blank spots in the list
             if self.scan[x]:
                 # add 30 if you want, this is an extra safety buffer
                 if self.scan[x] > (self.STOP_DIST + SAFETY_BUFFER):
