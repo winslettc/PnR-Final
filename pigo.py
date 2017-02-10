@@ -3,19 +3,21 @@
 from gopigo import *
 import time
 
-
 ##########################################################
 #################### PIGO PARENT CLASS
 #### (students will make their own class & inherit this)
 
+
 class Pigo(object):
-    MIDPOINT = 77
-    STOP_DIST = 20
-    RIGHT_SPEED = 200
-    LEFT_SPEED = 200
-    scan = [None] * 180
 
     def __init__(self):
+
+        self.MIDPOINT = 90
+        self.STOP_DIST = 30
+        self.RIGHT_SPEED = 200
+        self.LEFT_SPEED = 200
+        self.scan = [None] * 180
+
         # this makes sure the parent handler doesn't take over student's
         if __name__ == "__main__":
             print('-----------------------')
@@ -76,80 +78,10 @@ class Pigo(object):
     def nav(self):
         print("Parent nav")
 
-        #main app loop
-        while True:
-            #CRUISE FORWARD
-            if self.isClear():
-                self.cruise()
-            #IF I HAD TO STOP, PICK A BETTER PATH
-            turn_target = self.kenny()
-
-            if turn_target < 0:
-                self.turnR(abs(turn_target))
-            else:
-                self.turnL(turn_target)
-
-
-    #replacement turn method. Find the best option to turn
-    def kenny(self):
-        #use the built-in wideScan
-        self.wideScan()
-        #count will keep track of contigeous positive readings
-        count = 0
-        #list of all the open paths we detect
-        option = [0]
-        SAFETY_BUFFER = 30
-        #what increment do you have your widescan set to?
-        INC = 2
-
-        #############################################################
-        ################### BUILD THE OPTIONS
-        #############################################################
-        for x in range(self.MIDPOINT - 60, self.MIDPOINT + 60):
-            if self.scan[x]:
-                #add 30 if you want, this is an extra safety buffer
-                if self.scan[x] > (self.STOP_DIST + SAFETY_BUFFER):
-                    count += 1
-                #if this reading isn't safe...
-                else:
-                    #aww nuts, I have to reset the count, this path won't work
-                    count = 0
-                if count == (20/INC):
-                    #SUCCESS! I've found enough positive readings in a row to count
-                    print("Found an option from " + str(x - 20) + " to " + str(x))
-                    count = 0
-                    option.append(x - 10)
-
-        ###############################################################
-        ################### PICK FROM THE OPTIONS
-        ###############################################################
-        bestoption = 90
-        winner = 0
-        for x in option:
-            #skip our filler option. Behold the magenta!
-            if not x.__index__() == 0:
-                print("Choice # " + str(x.__index__()) + " is@ " + str(x) + " degrees")
-                ideal = self.turn_track + self.MIDPOINT
-                print("My ideal choice would be " + str(ideal))
-                if bestoption > abs(ideal - x):
-                    bestoption = abs(ideal - x)
-                    winner = x - self.MIDPOINT
-        return winner
-
 
     ##DANCING IS FOR THE CHILD CLASS
     def dance(self):
         print('Parent dance is lame.')
-        for x in range(self.MIDPOINT-20, self.MIDPOINT+20, 5):
-            servo(x)
-            time.sleep(.1)
-        self.encB(5)
-        self.encR(5)
-        self.encL(5)
-        self.encF(5)
-        for x in range(self.MIDPOINT-20, self.MIDPOINT+20, 10):
-            servo(x)
-            time.sleep(.1)
 
 
 
@@ -162,13 +94,11 @@ class Pigo(object):
         self.RIGHT_SPEED = right
         print('Left speed set to: '+str(left)+' // Right set to: '+str(right))
     
-    
     def encF(self, enc):
         print('Moving '+str((enc/18))+' rotation(s) forward')
         enc_tgt(1, 1, enc)
         fwd()
         time.sleep(1 * (enc / 18))
-
 
     def encR(self, enc):
         print('Moving '+str((enc/18))+' rotation(s) right')
@@ -190,26 +120,11 @@ class Pigo(object):
         bwd()
         time.sleep(1 * (enc / 18))
 
-
-    #HELP STUDENTS LEARN HOW TO PORTION TURN/SLEEP VALUES
-    def rotate(self):
-        print("We tell our robot to rotate then pause the app.")
-        print("The longer the pause, the longer the turn.")
-        print("We also like to slow our robot down for the turn.")
-        while True:
-            speed_adj = float(input("What modifier would you like to apply to your speed?"))
-            set_left_speed(int(self.LEFT_SPEED*speed_adj))
-            set_right_speed(int(self.RIGHT_SPEED*speed_adj))
-            turn_time = float(input("How many seconds would you like to turn? "))
-            right_rot()
-            time.sleep(turn_time)
-            self.stop()
-
-    ##DUMP ALL VALUES IN THE SCAN ARRAY
+    # DUMP ALL VALUES IN THE SCAN ARRAY
     def flushScan(self):
         self.scan = [None]*180
 
-    #SEARCH 120 DEGREES COUNTING BY 2's
+    # SEARCH 120 DEGREES COUNTING BY 2's
     def wideScan(self):
         #dump all values
         self.flushScan()
@@ -252,7 +167,7 @@ class Pigo(object):
                 return False
         return True
 
-    #DECIDE WHICH WAY TO TURN
+    # DECIDE WHICH WAY TO TURN
     def choosePath(self):
         print('Considering options...')
         if self.isClear():
@@ -287,10 +202,10 @@ class Pigo(object):
     def calibrate(self):
         print("Calibrating...")
         servo(self.MIDPOINT)
-        response = input("Am I looking straight ahead? (y/n): ")
+        response = str(input("Am I looking straight ahead? (y/n): "))
         if response == 'n':
             while True:
-                response = input("Turn right, left, or am I done? (r/l/d): ")
+                response = str(input("Turn right, left, or am I done? (r/l/d): "))
                 if response == "r":
                     self.MIDPOINT += 1
                     print("Midpoint: " + str(self.MIDPOINT))
@@ -320,12 +235,13 @@ class Pigo(object):
                 else:
                     break
     
-    #PRINTS THE CURRENT STATUS OF THE ROBOT
+    # PRINTS THE CURRENT STATUS OF THE ROBOT
     def status(self):
         print("My power is at "+ str(volt()) + " volts")
         print('Left speed set to: '+str(self.LEFT_SPEED)+' // Right set to: '+str(self.RIGHT_SPEED))
         print('My MIDPOINT is set to: '+ str(self.MIDPOINT))
         print('I get scared when things are closer than '+str(self.STOP_DIST)+'cm')
+
 
 ########################
 #### STATIC FUNCTIONS
