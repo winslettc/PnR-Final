@@ -226,7 +226,7 @@ class Pigo(object):
             print("Degree: "+str(x)+", distance: "+str(scan1))
             time.sleep(.01)
 
-    def isClear(self) -> bool:
+    def isClear(self):
         for x in range((self.MIDPOINT - 15), (self.MIDPOINT + 15), 5):
             servo(x)
             time.sleep(.1)
@@ -249,7 +249,7 @@ class Pigo(object):
         return True
 
     #DECIDE WHICH WAY TO TURN
-    def choosePath(self) -> str:
+    def choosePath(self):
         print('Considering options...')
         if self.isClear():
             return "fwd"
