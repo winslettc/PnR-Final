@@ -33,12 +33,11 @@ class Pigo(object):
     #### FUNCTIONS REPLACED IN CHILD CHILD
     #Parent's handler is replaced by child's
     def handler(self):
-        menu = {"1": ("Navigate forward", self.nav),
-                "2": ("Rotate", self.rotate),
-                "3": ("Dance", self.dance),
-                "4": ("Calibrate", self.calibrate),
-                "5": ("Forward", self.encF),
-                "6": ("Open House Demo", self.openHouse),
+        menu = {"n": ("Navigate forward", self.nav),
+                "d": ("Dance", self.dance),
+                "c": ("Calibrate", self.calibrate),
+                "f": ("Forward", self.encF),
+                "o": ("Open House Demo", self.openHouse),
                 "q": ("Quit", quit)
                 }
         for key in sorted(menu.keys()):
