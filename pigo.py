@@ -43,11 +43,11 @@ class Pigo(object):
         for key in sorted(menu.keys()):
             print(key + ":" + menu[key][0])
 
-        ans = input("Your selection: ")
+        ans = raw_input("Your selection: ")
         menu.get(ans, [None, error])[1]()
 
     def openHouse(self):
-        choice = input("1) Shy;  2) Spin.. ")
+        choice = raw_input("1) Shy;  2) Spin.. ")
         if choice == "1":
             while True:
                 if not self.isClear():
