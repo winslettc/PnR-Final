@@ -225,12 +225,14 @@ class Pigo(object):
                 set_left_speed(self.LEFT_SPEED)
                 set_right_speed(self.RIGHT_SPEED)
                 print("Left: " + str(self.LEFT_SPEED) + "//  Right: " + str(self.RIGHT_SPEED))
-                self.encF(9)
-                response = raw_input("Reduce left, reduce right or done? (l/r/d): ")
+                self.encF(18)
+                response = raw_input("Reduce left, reduce right or drive? (l/r/d): ")
                 if response == 'l':
                     self.LEFT_SPEED -= 10
                 elif response == 'r':
                     self.RIGHT_SPEED -= 10
+                elif response == 'd':
+                    self.encF(18)
                 else:
                     break
     
