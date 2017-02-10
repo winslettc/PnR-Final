@@ -201,10 +201,10 @@ class Pigo(object):
     def calibrate(self):
         print("Calibrating...")
         servo(self.MIDPOINT)
-        response = str(input("Am I looking straight ahead? (y/n): "))
+        response = raw_input("Am I looking straight ahead? (y/n): ")
         if response == 'n':
             while True:
-                response = str(input("Turn right, left, or am I done? (r/l/d): "))
+                response = raw_input("Turn right, left, or am I done? (r/l/d): ")
                 if response == "r":
                     self.MIDPOINT += 1
                     print("Midpoint: " + str(self.MIDPOINT))
@@ -218,7 +218,7 @@ class Pigo(object):
                 else:
                     print("Midpoint now saved to: " + str(self.MIDPOINT))
                     break
-        response = input("Do you want to check if I'm driving straight? (y/n)")
+        response = raw_input("Do you want to check if I'm driving straight? (y/n)")
         if response == 'y':
 
             while True:
@@ -226,7 +226,7 @@ class Pigo(object):
                 set_right_speed(self.RIGHT_SPEED)
                 print("Left: " + str(self.LEFT_SPEED) + "//  Right: " + str(self.RIGHT_SPEED))
                 self.encF(9)
-                response = input("Reduce left, reduce right or done? (l/r/d): ")
+                response = raw_input("Reduce left, reduce right or done? (l/r/d): ")
                 if response == 'l':
                     self.LEFT_SPEED -= 10
                 elif response == 'r':
