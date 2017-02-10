@@ -36,7 +36,6 @@ class Pigo(object):
         menu = {"n": ("Navigate forward", self.nav),
                 "d": ("Dance", self.dance),
                 "c": ("Calibrate", self.calibrate),
-                "f": ("Forward", self.encF),
                 "o": ("Open House Demo", self.openHouse),
                 "q": ("Quit", quit)
                 }
