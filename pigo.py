@@ -24,7 +24,7 @@ class Pigo(object):
             print('------- PARENT --------')
             print('-----------------------')
             # let's use an event-driven model, make a handler of sorts to listen for "events"
-            self.setSpeed(self.LEFT_SPEED, self.RIGHT_SPEED)
+            self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
             while True:
                 self.stop()
                 self.handler()
@@ -49,11 +49,11 @@ class Pigo(object):
         choice = raw_input("1) Shy;  2) Spin.. ")
         if choice == "1":
             while True:
-                if not self.isClear():
+                if not self.is_clear():
                     self.beShy()
         else:
             while True:
-                if not self.isClear():
+                if not self.is_clear():
                     for x in range(5):
                         self.encR(2)
                         self.encL(2)
@@ -83,9 +83,9 @@ class Pigo(object):
 
 
 
-    ########################################
+    ##############################################
     ##### FUNCTIONS NOT INTENDED TO BE OVERWRITTEN
-    def setSpeed(self, left, right):
+    def set_speed(self, left, right):
         set_left_speed(left)
         set_right_speed(right)
         self.LEFT_SPEED = left
@@ -104,7 +104,6 @@ class Pigo(object):
         right_rot()
         time.sleep(1 * (enc / 18))
 
-
     def encL(self, enc):
         print('Moving '+str((enc/18))+' rotation(s) left')
         enc_tgt(1, 1, enc)
@@ -119,13 +118,13 @@ class Pigo(object):
         time.sleep(1 * (enc / 18))
 
     # DUMP ALL VALUES IN THE SCAN ARRAY
-    def flushScan(self):
+    def flush_scan(self):
         self.scan = [None]*180
 
     # SEARCH 120 DEGREES COUNTING BY 2's
-    def wideScan(self):
+    def wide_scan(self):
         #dump all values
-        self.flushScan()
+        self.flush_scan()
         for x in range(self.MIDPOINT-60, self.MIDPOINT+60, +2):
             servo(x)
             time.sleep(.1)
@@ -143,7 +142,8 @@ class Pigo(object):
             print("Degree: "+str(x)+", distance: "+str(scan1))
             time.sleep(.01)
 
-    def isClear(self):
+    def is_clear(self):
+        print("Running the is_clear method.")
         for x in range((self.MIDPOINT - 15), (self.MIDPOINT + 15), 5):
             servo(x)
             time.sleep(.1)
@@ -166,12 +166,12 @@ class Pigo(object):
         return True
 
     # DECIDE WHICH WAY TO TURN
-    def choosePath(self):
+    def choose_path(self):
         print('Considering options...')
-        if self.isClear():
+        if self.is_clear():
             return "fwd"
         else:
-            self.wideScan()
+            self.wide_scan()
         avgRight = 0
         avgLeft = 0
         for x in range(self.MIDPOINT-60, self.MIDPOINT):
@@ -219,7 +219,6 @@ class Pigo(object):
                     break
         response = raw_input("Do you want to check if I'm driving straight? (y/n)")
         if response == 'y':
-
             while True:
                 set_left_speed(self.LEFT_SPEED)
                 set_right_speed(self.RIGHT_SPEED)
