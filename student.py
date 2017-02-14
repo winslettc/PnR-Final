@@ -1,7 +1,6 @@
 import pigo
 import time
 import random
-from gopigo import *
 
 '''
 MR. A's Final Project Student Helper

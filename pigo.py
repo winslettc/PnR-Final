@@ -60,7 +60,7 @@ class Pigo(object):
                     self.encR(15)
 
     def beShy(self):
-        set_speed(80)
+        self.set_speed(80, 80)
         self.encB(5)
         for x in range(3):
             servo(20)
