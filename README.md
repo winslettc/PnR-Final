@@ -14,22 +14,19 @@ As our project progresses, I will be updating the **pigo.py** file with helpful 
 [The GoPiGo API](http://www.dexterindustries.com/GoPiGo/programming/python-programming-for-the-raspberry-pi-gopigo/) is how we speak to our robot. It's why we have `from gopigo import *` at the top of our code. You **must become familiar with the API's commands**. 
 Below are some some helpful methods. These will not be enough for you to complete your project, but I hope they will help you get started. These Pigo methods use the GoPiGo API. 
 
-`self.rotate()`
-Lets you change the encode value and choose the direction to turn. It will let you measure how many degrees each encode value will produce.
-
-`self.isClear()`
+`self.is_clear()`
 Will perform a three point check around self.MIDPOINT and will return True if no distance is shorter than the stop dist.
 
-`self.choosePath()`
+`self.choose_path()`
 Performs self.flushScan() and then self.wideScan() to scan the area in front. The method averages the distances and returns a string "right" or "left" depending on the average distance around the MIDPOINT.
 
 `self.encR(x)`, `self.encL(x)`, `self.encF(x)`, `self.encB(x)`
 Will set the encode value passed to the method and executes the rotate, fwd, or bwd
 
-`self.wideScan()`
+`self.wide_scan()`
 This will fill your self.scan array with distances self.MIDPOINT-60, self.MIDPOINT+60, +2
 
-`self.flushScan()`
+`self.flush_scan()`
 Resets the list that stores the distances of the ultrasonic sensor. 
 
 `self.status()`
