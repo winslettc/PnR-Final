@@ -37,7 +37,8 @@ class Fresh:
 
     def veerRight(self):
         # do stuff so long as we need to avoid obstacles
-        self.servo(self.MIDPOINT+10)
+        self.fwd()
+        self.servo(self.MIDPOINT+15)
         while self.dist() < self.STOP_DIST * 3:
             # check if we're touching something
             if self.dist() < 5:
