@@ -41,7 +41,7 @@ class Fresh:
         # do stuff so long as we need to avoid obstacles
         while self.dist() < self.STOP_DIST:
             # check if we're touching something
-            if self.dist() < 2:
+            if self.dist() < 5:
                 self.stop()
                 # restore default speeds before shutting down
                 self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
@@ -51,7 +51,7 @@ class Fresh:
                 # HARD TURN
                 self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.2))
             # check if something is close
-            elif self.dist() < self.STOP_DIST:
+            elif self.dist() < self.STOP_DIST * 2:
                 # SOFTER TURN
                 self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.5))
         # restore default speeds now that we're successful
@@ -233,4 +233,5 @@ class Fresh:
 try:
     f = Fresh()
 except (KeyboardInterrupt, SystemExit):
+    from gopigo import *
     stop()
