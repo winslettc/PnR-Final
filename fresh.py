@@ -60,6 +60,9 @@ class Fresh:
 
     ##############################################
     ##### FUNCTIONS NOT INTENDED TO BE OVERWRITTEN
+    def fwd(self):
+        fwd()
+
     def set_speed(self, left, right):
         set_left_speed(left)
         set_right_speed(right)
