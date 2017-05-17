@@ -17,7 +17,8 @@ class Fresh:
         # Our scan list! The index will be the degree and it will store distance
         self.scan = [None] * 180
         self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
-        self.nav()
+        if __name__ == "__main__":
+            self.nav()
 
     def nav(self):
         print("\n-----STARTING NAVIGATION-------\n")
