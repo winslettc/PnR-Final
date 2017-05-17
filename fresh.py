@@ -39,24 +39,25 @@ class Fresh:
     def checkAhead(self):
         # look forward
         self.servo(self.MIDPOINT)
-        # check if we're touching something
-        if self.dist() < 2:
-            self.stop()
-            return False # give up
-        # check if something is REALLY close
-        elif self.dist() < self.STOP_DIST * .5:
-            # HARD TURN
-            self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.2))
-        # check if something is close
-        elif self.dist() < self.STOP_DIST:
-            # SOFTER TURN
-            self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.5))
-
-        # hold turn until it's clear
+        # do stuff so long as we need to avoid obstacles
         while self.dist() < self.STOP_DIST:
-            time.sleep(.01)
+            # check if we're touching something
+            if self.dist() < 2:
+                self.stop()
+                # restore default speeds before shutting down
+                self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
+                return False  # give up
+            # check if something is REALLY close
+            elif self.dist() < int(self.STOP_DIST * .5):
+                # HARD TURN
+                self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.2))
+            # check if something is close
+            elif self.dist() < self.STOP_DIST:
+                # SOFTER TURN
+                self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.5))
+        # restore default speeds now that we're successful
         self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
-        return True  # roll on
+        return True  # we look cool for now, roll on
 
 
 
@@ -104,10 +105,14 @@ class Fresh:
         time.sleep(.1)
 
     def dist(self):
-        measurement = us_dist(15)
-        time.sleep(.05)
-        print('I see something ' + str(measurement) + "cm away")
-        return measurement
+        measurement1 = us_dist(15)
+        time.sleep(.01)
+        measurement2 = us_dist(15)
+        time.sleep(.01)
+        if abs(measurement1 - measurement2) > 5:
+            measurement1 = int((measurement1 + measurement2 + us_dist(15)) / 3)
+        print('I see something ' + str(measurement1) + "cm away")
+        return measurement1
 
     # DUMP ALL VALUES IN THE SCAN ARRAY
     def flush_scan(self):
