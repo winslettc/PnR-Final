@@ -110,9 +110,6 @@ class Fresh:
     def dist(self):
         measurement1 = us_dist(15)
         time.sleep(.005)
-        if measurement1 < 10:  # emergency stop
-            print("dist method catching an emergency stop")
-            self.stop()
         measurement2 = us_dist(15)
         time.sleep(.005)
         if abs(measurement1 - measurement2) > 5:
