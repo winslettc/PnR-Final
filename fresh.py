@@ -37,8 +37,6 @@ class Fresh:
                     self.encR(10)
 
     def checkAhead(self):
-        # look forward
-        self.servo(self.MIDPOINT)
         # do stuff so long as we need to avoid obstacles
         while self.dist() < self.STOP_DIST:
             # check if we're touching something
