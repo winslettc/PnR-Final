@@ -28,7 +28,8 @@ class Fresh:
             if self.is_clear():
                 count = 0  # reset the frustration counter
                 self.fwd()
-                self.checkAhead()
+                while self.checkAhead():
+                    time.sleep(.001)
                 #self.checkRight()
                 #self.checkLeft()
             else:  # it hasn't been clear for a while. let's turn out of here
@@ -41,7 +42,7 @@ class Fresh:
         # check if we're touching something
         if self.dist() < 2:
             self.stop()
-            return  # give up
+            return False # give up
         # check if something is REALLY close
         elif self.dist() < self.STOP_DIST * .5:
             # HARD TURN
@@ -55,6 +56,7 @@ class Fresh:
         while self.dist() < self.STOP_DIST:
             time.sleep(.01)
         self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
+        return True  # roll on
 
 
 
