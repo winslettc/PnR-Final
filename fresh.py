@@ -39,7 +39,7 @@ class Fresh:
 
     def checkAhead(self):
         # do stuff so long as we need to avoid obstacles
-        while self.dist() < self.STOP_DIST:
+        while self.dist() < self.STOP_DIST * 3:
             # check if we're touching something
             if self.dist() < 5:
                 self.stop()
