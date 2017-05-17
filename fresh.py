@@ -43,6 +43,7 @@ class Fresh:
             # check if we're touching something
             if self.dist() < 5:
                 self.stop()
+                self.encB(3)
                 # restore default speeds before shutting down
                 self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
                 return False  # give up
@@ -63,7 +64,10 @@ class Fresh:
     ##############################################
     ##### FUNCTIONS NOT INTENDED TO BE OVERWRITTEN
     def fwd(self):
-        fwd()
+        print("Going forward")
+        for x in range(3):
+            fwd()
+            time.sleep(.001)
 
     def set_speed(self, left, right):
         set_left_speed(left)
@@ -105,12 +109,12 @@ class Fresh:
 
     def dist(self):
         measurement1 = us_dist(15)
-        time.sleep(.01)
+        time.sleep(.005)
         if measurement1 < 10:  # emergency stop
             print("dist method catching an emergency stop")
             self.stop()
         measurement2 = us_dist(15)
-        time.sleep(.01)
+        time.sleep(.005)
         if abs(measurement1 - measurement2) > 5:
             measurement1 = int((measurement1 + measurement2 + us_dist(15)) / 3)
         print('I see something ' + str(measurement1) + "cm away")
