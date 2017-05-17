@@ -20,16 +20,16 @@ class Fresh:
         self.nav()
 
     def nav(self):
-        raw_input("\n-----STARTING NAVIGATION-------\n")
+        print("\n-----STARTING NAVIGATION-------\n")
         count = 0  # keep track of how many loops we've done without moving
         while True:
             count += 1
-            self.stop()
             if self.is_clear():
                 count = 0  # reset the frustration counter
+                raw_input("press ENTER to start driving")
                 self.fwd()
                 while self.checkAhead():
-                    time.sleep(.001)
+                    pass
                 #self.checkRight()
                 #self.checkLeft()
             else:  # it hasn't been clear for a while. let's turn out of here
@@ -140,6 +140,7 @@ class Fresh:
             time.sleep(.01)
 
     def is_clear(self):
+        self.stop()
         print("Running the is_clear method.")
         for x in range((self.MIDPOINT - 15), (self.MIDPOINT + 15), 5):
             servo(x)
@@ -190,7 +191,7 @@ class Fresh:
         print('All stop.')
         for x in range(3):
             stop()
-            time.sleep(0.01)
+            time.sleep(0.1)
 
     def calibrate(self):
         print("Calibrating...")
