@@ -29,16 +29,15 @@ class Fresh:
                 count = 0  # reset the frustration counter
                 raw_input("press ENTER to start driving")
                 self.fwd()
-                while self.checkAhead():
+                while self.veerRight():
                     pass
-                #self.checkRight()
-                #self.checkLeft()
             else:  # it hasn't been clear for a while. let's turn out of here
                 if count > 3:
                     self.encR(10)
 
-    def checkAhead(self):
+    def veerRight(self):
         # do stuff so long as we need to avoid obstacles
+        self.servo(self.MIDPOINT+10)
         while self.dist() < self.STOP_DIST * 3:
             # check if we're touching something
             if self.dist() < 5:
@@ -51,7 +50,7 @@ class Fresh:
                 # HARD TURN
                 self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.2))
             # check if something is close
-            elif self.dist() < self.STOP_DIST * 2:
+            elif self.dist() < self.STOP_DIST * 3:
                 # SOFTER TURN
                 self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.5))
         # restore default speeds now that we're successful
@@ -106,6 +105,9 @@ class Fresh:
     def dist(self):
         measurement1 = us_dist(15)
         time.sleep(.01)
+        if measurement1 < 10:  # emergency stop
+            print("dist method catching an emergency stop")
+            self.stop()
         measurement2 = us_dist(15)
         time.sleep(.01)
         if abs(measurement1 - measurement2) > 5:
