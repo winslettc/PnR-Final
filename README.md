@@ -3,6 +3,10 @@ The final project for [Gilmour Academy's](http://www.gilmour.org) Programming an
  
 The ideal solution will work quickly and will output detailed description of the robot's thinking to the SSH console. 
 
+## What I've tried 
+
+
+
 ## Useful Info
 
 All of your work will go into the **student.py** file. Your **student.py** file has `class GoPiggy` which inherits all the properties from the teacher's `class Pigo`. The parent class, Pigo, is in the **pigo.py** file. Leave that file alone. All your work is done in the **student.py** file. 

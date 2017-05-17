@@ -1,86 +1,60 @@
-# STUDENTS SHOULD NOT EDIT THIS FILE. IT WILL MAKE UPDATING MORE DIFFICULT
-
 from gopigo import *
 import time
-import logging
 
-##########################################################
-#################### PIGO PARENT CLASS
-#### (students will make their own class & inherit this)
-
-
-class Pigo(object):
-
+class Fresh:
     def __init__(self):
-
+        print("\n-----This better work!-------\n")
+        # Our servo turns the sensor. What angle of the servo( ) method sets it straight?
         self.MIDPOINT = 90
+        # YOU DECIDE: How close can an object get (cm) before we have to stop?
         self.STOP_DIST = 30
-        self.RIGHT_SPEED = 200
-        self.LEFT_SPEED = 200
+        # YOU DECIDE: What left motor power helps straighten your fwd()?
+        self.LEFT_SPEED = 140
+        # YOU DECIDE: What left motor power helps straighten your fwd()?
+        self.RIGHT_SPEED = 140
+        # This one isn't capitalized because it changes during runtime, the others don't
+        self.turn_track = 0
+        # Our scan list! The index will be the degree and it will store distance
         self.scan = [None] * 180
+        self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
+        self.nav()
 
-        # this makes sure the parent handler doesn't take over student's
-        if __name__ == "__main__":
-            print('-----------------------')
-            print('------- PARENT --------')
-            print('-----------------------')
-            # let's use an event-driven model, make a handler of sorts to listen for "events"
-            self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
-            while True:
-                self.stop()
-                self.handler()
-
-    ########################################
-    #### FUNCTIONS REPLACED IN CHILD CHILD
-    #Parent's handler is replaced by child's
-    def handler(self):
-        menu = {"n": ("Navigate forward", self.nav),
-                "d": ("Dance", self.dance),
-                "c": ("Calibrate", self.calibrate),
-                "o": ("Open House Demo", self.openHouse),
-                "q": ("Quit", quit)
-                }
-        for key in sorted(menu.keys()):
-            print(key + ":" + menu[key][0])
-
-        ans = raw_input("Your selection: ")
-        menu.get(ans, [None, error])[1]()
-
-    def openHouse(self):
-        choice = raw_input("1) Shy;  2) Spin.. ")
-        if choice == "1":
-            while True:
-                if not self.is_clear():
-                    self.beShy()
-        else:
-            while True:
-                if not self.is_clear():
-                    for x in range(5):
-                        self.encR(2)
-                        self.encL(2)
-                    self.encR(15)
-
-    def beShy(self):
-        self.set_speed(80, 80)
-        self.encB(5)
-        for x in range(3):
-            servo(20)
-            time.sleep(.1)
-            servo(120)
-            time.sleep(.1)
-        self.encL(2)
-        self.encR(2)
-        self.encF(5)
-
-    #Explain the purpose of the method
-    #Central logic loop of my navigation
     def nav(self):
-        print("Parent nav")
+        print("\n-----STARTING NAVIGATION-------\n")
+        count = 0  # keep track of how many loops we've done without moving
+        while True:
+            count += 1
+            self.stop()
+            if self.is_clear():
+                count = 0  # reset the frustration counter
+                self.fwd()
+                self.checkAhead()
+                self.checkRight()
+                self.checkLeft()
+            else:  # it hasn't been clear for a while. let's turn out of here
+                if count > 3:
+                    self.encR(10)
 
+    def checkAhead(self):
+        # look forward
+        self.servo(self.MIDPOINT)
+        # check if we're touching something
+        if self.dist() < 2:
+            self.stop()
+            return  # give up
+        # check if something is REALLY close
+        elif self.dist() < self.STOP_DIST * .5:
+            # HARD TURN
+            self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.2))
+        # check if something is close
+        elif self.dist() < self.STOP_DIST:
+            # SOFTER TURN
+            self.set_speed(self.LEFT_SPEED, int(self.RIGHT_SPEED*.5))
 
-    ##DANCING IS FOR THE CHILD CLASS
-    def dance(self):
-        print('Parent dance is lame.')
+        # hold turn until it's clear
+        while self.dist() < self.STOP_DIST:
+            time.sleep(.01)
+        self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
 
 
 
@@ -89,35 +63,35 @@ class Pigo(object):
     def set_speed(self, left, right):
         set_left_speed(left)
         set_right_speed(right)
-        print('Left speed set to: '+str(left)+' // Right set to: '+str(right))
-
-    def fwd(self):
-        fwd()
+        print('Left speed set to: ' + str(left) + ' // Right set to: ' + str(right))
 
     def encF(self, enc):
-        print('Moving '+str((enc/18))+' rotation(s) forward')
+        print('Moving ' + str((enc / 18)) + ' rotation(s) forward')
         enc_tgt(1, 1, enc)
         fwd()
-        time.sleep(1 * (enc / 18)+.4)
+        time.sleep(1 * (enc / 18) + .4)
 
     def encR(self, enc):
-        print('Moving '+str((enc/18))+' rotation(s) right')
+        print('Moving ' + str((enc / 18)) + ' rotation(s) right')
         enc_tgt(1, 1, enc)
         right_rot()
-        time.sleep(1 * (enc / 18)+.4)
+        time.sleep(1 * (enc / 18) + .4)
+        # UPDATE THE TURN TRACKER SO I KNOW MY HEADING
+        self.turn_track += enc
 
     def encL(self, enc):
-        print('Moving '+str((enc/18))+' rotation(s) left')
+        print('Moving ' + str((enc / 18)) + ' rotation(s) left')
         enc_tgt(1, 1, enc)
         left_rot()
-        time.sleep(1*(enc/18)+.4)
-
+        time.sleep(1 * (enc / 18) + .4)
+        # UPDATE THE TURN TRACKER SO I KNOW MY HEADING
+        self.turn_track -= enc
 
     def encB(self, enc):
-        print('Moving '+str((enc/18))+ ' rotations(s) backwards')
+        print('Moving ' + str((enc / 18)) + ' rotations(s) backwards')
         enc_tgt(1, 1, enc)
         bwd()
-        time.sleep(1 * (enc / 18)+.4)
+        time.sleep(1 * (enc / 18) + .4)
 
     def servo(self, val):
         print('Moving servo to ' + str(val) + 'deg')
@@ -132,27 +106,27 @@ class Pigo(object):
 
     # DUMP ALL VALUES IN THE SCAN ARRAY
     def flush_scan(self):
-        self.scan = [None]*180
+        self.scan = [None] * 180
 
     # SEARCH 120 DEGREES COUNTING BY 2's
     def wide_scan(self, count=2):
-        #dump all values
+        # dump all values
         self.flush_scan()
-        for x in range(self.MIDPOINT-60, self.MIDPOINT+60, count):
+        for x in range(self.MIDPOINT - 60, self.MIDPOINT + 60, count):
             servo(x)
             time.sleep(.1)
             scan1 = us_dist(15)
             time.sleep(.1)
-            #double check the distance
+            # double check the distance
             scan2 = us_dist(15)
-            #if I found a different distance the second time....
+            # if I found a different distance the second time....
             if abs(scan1 - scan2) > 2:
                 scan3 = us_dist(15)
                 time.sleep(.1)
-                #take another scan and average the three together
-                scan1 = (scan1+scan2+scan3)/3
+                # take another scan and average the three together
+                scan1 = (scan1 + scan2 + scan3) / 3
             self.scan[x] = scan1
-            print("Degree: "+str(x)+", distance: "+str(scan1))
+            print("Degree: " + str(x) + ", distance: " + str(scan1))
             time.sleep(.01)
 
     def is_clear(self):
@@ -187,18 +161,16 @@ class Pigo(object):
             self.wide_scan()
         avgRight = 0
         avgLeft = 0
-        for x in range(self.MIDPOINT-60, self.MIDPOINT):
+        for x in range(self.MIDPOINT - 60, self.MIDPOINT):
             if self.scan[x]:
                 avgRight += self.scan[x]
         avgRight /= 60
-        print('The average dist on the right is '+str(avgRight)+'cm')
-        logging.info('The average dist on the right is ' + str(avgRight) + 'cm')
-        for x in range(self.MIDPOINT, self.MIDPOINT+60):
+        print('The average dist on the right is ' + str(avgRight) + 'cm')
+        for x in range(self.MIDPOINT, self.MIDPOINT + 60):
             if self.scan[x]:
                 avgLeft += self.scan[x]
         avgLeft /= 60
         print('The average dist on the left is ' + str(avgLeft) + 'cm')
-        logging.info('The average dist on the left is ' + str(avgLeft) + 'cm')
         if avgRight > avgLeft:
             return "right"
         else:
@@ -206,12 +178,9 @@ class Pigo(object):
 
     def stop(self):
         print('All stop.')
-        for x in range(3):
-            stop()
+        stop()
         servo(self.MIDPOINT)
         time.sleep(0.05)
-        disable_servo()
-        logging.info("STOP COMMAND RECEIVED")
 
     def calibrate(self):
         print("Calibrating...")
@@ -249,24 +218,9 @@ class Pigo(object):
                     self.encF(18)
                 else:
                     break
-    
-    # PRINTS THE CURRENT STATUS OF THE ROBOT
-    def status(self):
-        print("My power is at "+ str(volt()) + " volts")
-        print('Left speed set to: '+str(self.LEFT_SPEED)+' // Right set to: '+str(self.RIGHT_SPEED))
-        print('My MIDPOINT is set to: '+ str(self.MIDPOINT))
-        print('I get scared when things are closer than '+str(self.STOP_DIST)+'cm')
 
 
-########################
-#### STATIC FUNCTIONS
-
-def error():
-    print('Error in input')
-
-
-def quit():
-    raise SystemExit
-
-
-p = Pigo()
+try:
+    f = Fresh()
+except (KeyboardInterrupt, SystemExit):
+    stop()
