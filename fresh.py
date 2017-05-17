@@ -20,7 +20,7 @@ class Fresh:
         self.nav()
 
     def nav(self):
-        print("\n-----STARTING NAVIGATION-------\n")
+        raw_input("\n-----STARTING NAVIGATION-------\n")
         count = 0  # keep track of how many loops we've done without moving
         while True:
             count += 1
@@ -29,8 +29,8 @@ class Fresh:
                 count = 0  # reset the frustration counter
                 self.fwd()
                 self.checkAhead()
-                self.checkRight()
-                self.checkLeft()
+                #self.checkRight()
+                #self.checkLeft()
             else:  # it hasn't been clear for a while. let's turn out of here
                 if count > 3:
                     self.encR(10)
