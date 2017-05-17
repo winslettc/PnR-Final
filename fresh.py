@@ -188,9 +188,9 @@ class Fresh:
 
     def stop(self):
         print('All stop.')
-        stop()
-        servo(self.MIDPOINT)
-        time.sleep(0.05)
+        for x in range(3):
+            stop()
+            time.sleep(0.01)
 
     def calibrate(self):
         print("Calibrating...")
