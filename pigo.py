@@ -4,49 +4,50 @@ from gopigo import *
 import time
 import logging
 
-##########################################################
-#################### PIGO PARENT CLASS
-#### (students will make their own class & inherit this)
-
 
 class Pigo(object):
+    """GoPiGo parent class... students make their own that inherit this"""
 
     def __init__(self):
-
+        """establishes midpoint, standard stop distance and motor speed then opens menu"""
         self.MIDPOINT = 90
-        self.STOP_DIST = 30
+        self.HARD_STOP_DIST = 10
+        self.SAFE_STOP_DIST = 30
         self.RIGHT_SPEED = 200
         self.LEFT_SPEED = 200
+        self.turn_track = 0
         self.scan = [None] * 180
 
-        # this makes sure the parent handler doesn't take over student's
-        if __name__ == "__main__":
+        if __name__ == "__main__":  # this makes sure the parent handler doesn't take over student's
             print('-----------------------')
             print('------- PARENT --------')
             print('-----------------------')
-            # let's use an event-driven model, make a handler of sorts to listen for "events"
+
             self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
             while True:
                 self.stop()
-                self.handler()
+                self.menu()
 
-    ########################################
-    #### FUNCTIONS REPLACED IN CHILD CHILD
-    #Parent's handler is replaced by child's
-    def handler(self):
+    ####
+    ###############################################
+    #### FUNCTIONS INTENDED TO BE REPLACED IN CHILD
+
+    def menu(self):
+        """gives options to users, calls requested method"""
         menu = {"n": ("Navigate forward", self.nav),
                 "d": ("Dance", self.dance),
                 "c": ("Calibrate", self.calibrate),
-                "o": ("Open House Demo", self.openHouse),
+                "o": ("Open House Demo", self.open_house),
                 "q": ("Quit", quit)
                 }
-        for key in sorted(menu.keys()):
+        for key in sorted(menu.keys()): # Mr. A, did you copy this from StackOverflow? Yes.
             print(key + ":" + menu[key][0])
 
         ans = raw_input("Your selection: ")
         menu.get(ans, [None, error])[1]()
 
-    def openHouse(self):
+    def open_house(self):
+        """Cute demo used for open house"""
         choice = raw_input("1) Shy;  2) Spin.. ")
         if choice == "1":
             while True:
@@ -61,6 +62,7 @@ class Pigo(object):
                     self.encR(15)
 
     def beShy(self):
+        """animates a shy withdrawal"""
         self.set_speed(80, 80)
         self.encB(5)
         for x in range(3):
@@ -72,14 +74,15 @@ class Pigo(object):
         self.encR(2)
         self.encF(5)
 
-    #Explain the purpose of the method
-    #Central logic loop of my navigation
+
     def nav(self):
+        """auto-pilots, tries to maintain direction while avoid obstacles"""
         print("Parent nav")
 
 
     ##DANCING IS FOR THE CHILD CLASS
     def dance(self):
+        """runs a series of methods each animating a dance move"""
         print('Parent dance is lame.')
 
 
@@ -87,56 +90,71 @@ class Pigo(object):
     ##############################################
     ##### FUNCTIONS NOT INTENDED TO BE OVERWRITTEN
     def set_speed(self, left, right):
+        """takes left and right speed 0-255"""
         set_left_speed(left)
         set_right_speed(right)
         print('Left speed set to: '+str(left)+' // Right set to: '+str(right))
 
     def fwd(self):
+        """shell command for GoPiGo fwd"""
         fwd()
 
     def encF(self, enc):
+        """sets encoder, moves forward, sleeps (18 = 1 wheel rot)"""
         print('Moving '+str((enc/18))+' rotation(s) forward')
         enc_tgt(1, 1, enc)
         fwd()
         time.sleep(1 * (enc / 18)+.4)
 
     def encR(self, enc):
+        """sets encoder, right_rot, += turn_track, (18 = 1 wheel rot)"""
         print('Moving '+str((enc/18))+' rotation(s) right')
         enc_tgt(1, 1, enc)
         right_rot()
+        self.turn_track += enc
         time.sleep(1 * (enc / 18)+.4)
 
     def encL(self, enc):
+        """sets encoder, right_rot, -= turn_track, (18 = 1 wheel rot)"""
         print('Moving '+str((enc/18))+' rotation(s) left')
         enc_tgt(1, 1, enc)
         left_rot()
+        self.turn_track -= enc
         time.sleep(1*(enc/18)+.4)
 
 
     def encB(self, enc):
+        """sets an encoder, moves back, sleeps, (18 = 1 wheel rot)"""
         print('Moving '+str((enc/18))+ ' rotations(s) backwards')
         enc_tgt(1, 1, enc)
         bwd()
         time.sleep(1 * (enc / 18)+.4)
 
     def servo(self, val):
-        print('Moving servo to ' + str(val) + 'deg')
-        servo(val)
-        time.sleep(.1)
+        """moves the head of the robot to the given degree within 60 from midpoint"""
+        if val > self.MIDPOINT-60 and val < self.MIDPOINT+60:
+            print('Moving servo to ' + str(val) + 'deg')
+            servo(val)
+            time.sleep(.1)
+        else:
+            print('range outside of %d - %d' % (self.MIDPOINT-60, self.MIDPOINT+60))
 
     def dist(self):
+        """takes a measurement from the ultrasonic sensor, prints and returns dist in cm"""
         measurement = us_dist(15)
+        if measurement < self.HARD_STOP_DIST:
+            print('hard stop triggered during dist')
+            self.stop()
         time.sleep(.05)
         print('I see something ' + str(measurement) + "cm away")
         return measurement
 
-    # DUMP ALL VALUES IN THE SCAN ARRAY
     def flush_scan(self):
+        """resets the scan array"""
         self.scan = [None]*180
 
-    # SEARCH 120 DEGREES COUNTING BY 2's
     def wide_scan(self, count=2):
-        #dump all values
+        """moves servo 120 degrees and fills scan array, default count=2"""
         self.flush_scan()
         for x in range(self.MIDPOINT-60, self.MIDPOINT+60, count):
             servo(x)
@@ -156,30 +174,27 @@ class Pigo(object):
             time.sleep(.01)
 
     def is_clear(self):
+        """does a 3-point scan around the midpoint, returns false if a test fails"""
         print("Running the is_clear method.")
         for x in range((self.MIDPOINT - 15), (self.MIDPOINT + 15), 5):
-            servo(x)
-            time.sleep(.1)
-            scan1 = us_dist(15)
-            time.sleep(.1)
+            self.servo(x)
+            scan1 = self.dist()
             # double check the distance
-            scan2 = us_dist(15)
-            time.sleep(.1)
+            scan2 = self.dist()
             # if I found a different distance the second time....
             if abs(scan1 - scan2) > 2:
-                scan3 = us_dist(15)
-                time.sleep(.1)
+                scan3 = self.dist()
                 # take another scan and average the three together
                 scan1 = (scan1 + scan2 + scan3) / 3
             self.scan[x] = scan1
             print("Degree: " + str(x) + ", distance: " + str(scan1))
-            if scan1 < self.STOP_DIST:
+            if scan1 < self.SAFE_STOP_DIST:
                 print("Doesn't look clear to me")
                 return False
         return True
 
-    # DECIDE WHICH WAY TO TURN
     def choose_path(self):
+        """averages distance on either side of midpoint and turns"""
         print('Considering options...')
         if self.is_clear():
             return "fwd"
@@ -205,17 +220,17 @@ class Pigo(object):
             return "left"
 
     def stop(self):
+        """spams stop command and moves servo to midpoint"""
         print('All stop.')
         for x in range(3):
             stop()
-        servo(self.MIDPOINT)
-        time.sleep(0.05)
-        disable_servo()
+        self.servo(self.MIDPOINT)
         logging.info("STOP COMMAND RECEIVED")
 
     def calibrate(self):
+        """allows user to experiment on finding centered midpoint and even motor speeds"""
         print("Calibrating...")
-        servo(self.MIDPOINT)
+        self.servo(self.MIDPOINT)
         response = raw_input("Am I looking straight ahead? (y/n): ")
         if response == 'n':
             while True:
@@ -223,22 +238,20 @@ class Pigo(object):
                 if response == "r":
                     self.MIDPOINT += 1
                     print("Midpoint: " + str(self.MIDPOINT))
-                    servo(self.MIDPOINT)
-                    time.sleep(.01)
+                    self.servo(self.MIDPOINT)
                 elif response == "l":
                     self.MIDPOINT -= 1
                     print("Midpoint: " + str(self.MIDPOINT))
-                    servo(self.MIDPOINT)
-                    time.sleep(.01)
+                    self.servo(self.MIDPOINT)
                 else:
                     print("Midpoint now saved to: " + str(self.MIDPOINT))
                     break
+        else:
+            print('Okay, remember %d as the correct self.MIDPOINT' % self.MIDPOINT)
         response = raw_input("Do you want to check if I'm driving straight? (y/n)")
-        if response == 'y':
+        if 'y' in response:
             while True:
-                set_left_speed(self.LEFT_SPEED)
-                set_right_speed(self.RIGHT_SPEED)
-                print("Left: " + str(self.LEFT_SPEED) + "//  Right: " + str(self.RIGHT_SPEED))
+                self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
                 self.encF(18)
                 response = raw_input("Reduce left, reduce right or drive? (l/r/d): ")
                 if response == 'l':
@@ -249,24 +262,34 @@ class Pigo(object):
                     self.encF(18)
                 else:
                     break
-    
-    # PRINTS THE CURRENT STATUS OF THE ROBOT
+
     def status(self):
+        """prints the voltage, motor power, midpoint and stop dist"""
         print("My power is at "+ str(volt()) + " volts")
         print('Left speed set to: '+str(self.LEFT_SPEED)+' // Right set to: '+str(self.RIGHT_SPEED))
         print('My MIDPOINT is set to: '+ str(self.MIDPOINT))
-        print('I get scared when things are closer than '+str(self.STOP_DIST)+'cm')
+        print('My safe stop distance is ' + str(self.SAFE_STOP_DIST) + 'cm')
+        print('My hard stop distance is ' + str(self.HARD_STOP_DIST) + 'cm')
 
+
+def stop_now():
+    try:
+        from gopigo import *
+        stop()
+    except Exception as err:
+        print(err)
+        print("\nCOULDN'T AUTO-STOP!!\n!!!! CUT POWER !!!!!")
 
 ########################
-#### STATIC FUNCTIONS
-
-def error():
-    print('Error in input')
+#### MAIN APP
 
 
-def quit():
-    raise SystemExit
-
-
-p = Pigo()
+try:
+    p = Pigo()
+except (KeyboardInterrupt, SystemExit):
+    from gopigo import *
+    stop()
+except Exception as ee:
+    from gopigo import *
+    stop()
+    logging.error(ee.__str__())
