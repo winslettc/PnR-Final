@@ -287,9 +287,7 @@ def stop_now():
 try:
     p = Pigo()
 except (KeyboardInterrupt, SystemExit):
-    from gopigo import *
-    stop()
+    stop_now()
 except Exception as ee:
-    from gopigo import *
-    stop()
+    stop_now()
     logging.error(ee.__str__())
