@@ -69,7 +69,7 @@ class Piggy(pigo.Pigo):
             self.encR(10)
             for x in range(4):
                 self.encF(10)
-                self.time.sleep(.2)
+                time.stop()
 
     def to_the_left(self):
         """subroutine of dance method/ turns left and then pulses four times"""
@@ -77,7 +77,7 @@ class Piggy(pigo.Pigo):
             self.encL(10)
             for x in range(4):
                 self.encF(10)
-                time.sleep(.2)
+                time.stop()
 
     def now_kick(self):
         """subroutine of dance/ moves robot back and forth"""
@@ -99,7 +99,7 @@ class Piggy(pigo.Pigo):
         """Moves in a full circle to the right then to the left"""
         for x in range(2):
             self.encR(18)
-            self.time.sleep(.2)
+            time.stop
             self.encL(18)
 
     def servo_shake(self):
