@@ -97,7 +97,7 @@ class Piggy(pigo.Pigo):
 
     def servo_shake(self):
         """Subroutine of dance function/ moves servo head back and forth"""
-        for x in range(5):
+        for x in range(3):
             self.servo(70)
             self.servo(120)
 
