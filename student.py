@@ -78,7 +78,7 @@ class Piggy(pigo.Pigo):
                 self.encF(10)
 
     def now_kick(self):
-        """subroutine of dance"""
+        """subroutine of dance/ moves robot back and forth"""
         for x in range(4):
             self.encF(5)
             self.encB(5)
@@ -93,7 +93,7 @@ class Piggy(pigo.Pigo):
             self.encL(18)
 
     def walk_it_by_yourself(self):
-        """Moves in a full circle"""
+        """Moves in a full circle to the right then to the left"""
         for x in range(2):
             self.encR(18)
             self.time.sleep(.2)
