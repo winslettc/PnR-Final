@@ -82,10 +82,11 @@ class Piggy(pigo.Pigo):
 
     def now_kick(self):
         """subroutine of dance/ moves robot back and forth"""
-        for x in range(4):
+        for x in range(1):
             self.encR(9)
-            self.encF(5)
-            self.encB(5)
+            for x in range (4):
+                self.encF(5)
+                self.encB(5)
 
     def cha_cha(self):
         """Subroutine of dance/ moves right, left, shakes servo"""
