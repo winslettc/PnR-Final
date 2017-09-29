@@ -77,7 +77,7 @@ class Piggy(pigo.Pigo):
             self.encL(10)
             for x in range(4):
                 self.encF(10)
-                self.time.sleep(.2)
+                time.sleep(.2)
 
     def now_kick(self):
         """subroutine of dance/ moves robot back and forth"""
