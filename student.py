@@ -86,6 +86,7 @@ class Piggy(pigo.Pigo):
             self.fwd()
 
     def cha_cha(self):
+        """Subroutine of dance/ moves right and left while shaking servo"""
         for x in range(6):
             self.encR(2)
             self.encL(2)
@@ -93,6 +94,7 @@ class Piggy(pigo.Pigo):
 
 
     def walk_it_by_yourself(self):
+        """Moves in a full circle"""
         for x in range(2):
             self.encR(18)
 
