@@ -88,14 +88,20 @@ class Piggy(pigo.Pigo):
         for x in range(6):
             self.encR(3)
             self.encL(3)
-            self.servo(70)
-            self.servo(90)
-            self.servo(110)
+            self.servo_shake()
 
     def walk_it_by_yourself(self):
         """Moves in a full circle"""
-        for x in range(4):
+        for x in range(2):
             self.encR(18)
+            self.encL(18)
+
+    def servo_shake(self):
+        """Subroutine of dance function/ moves servo head back and forth"""
+        for x in range(5):
+            self.servo(70)
+            self.servo(120)
+
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
