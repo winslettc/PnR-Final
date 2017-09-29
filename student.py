@@ -74,7 +74,7 @@ class Piggy(pigo.Pigo):
     def to_the_left(self):
         """subroutine of dance method/ turns left and then pulses four times"""
         for x in range(1):
-            self.encL(10)
+            self.encL(18)
             for x in range(4):
                 self.encF(10)
                 self.stop()
