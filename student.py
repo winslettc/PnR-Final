@@ -58,23 +58,43 @@ class Piggy(pigo.Pigo):
         print("\n---- LET'S DANCE ----\n")
         ##### WRITE YOUR FIRST PROJECT HERE
         self.to_the_right()
-        #self.to_the_left()
-        #self.now_kick()
-        #self.cha_cha()
-        #self.walk_it_by_youself()
+        self.to_the_left()
+        self.now_kick()
+        self.cha_cha()
+        self.walk_it_by_youself()
 
     def to_the_right(self):
-        """subroutine of dance method"""
-        for x in range (4):
+        """subroutine of dance method/ turns right and then pulses for times"""
+        for x in range(1):
             self.encR(10)
             self.encF(10)
+        for x in range(4):
+            self.fwd()
 
     def to_the_left(self):
-        """subroutine of dance method"""
-        for x in range (4):
+        """subroutine of dance method/ turns left and then pulses four times"""
+        for x in range(1):
             self.encL(10)
             self.encF(10)
+        for x in range(4):
+            self.fwd()
 
+    def now_kick(self):
+        """subroutine of dance"""
+        for x in range(4):
+            self.encR(10)
+            self.fwd()
+
+    def cha_cha(self):
+        for x in range(6):
+            self.encR(2)
+            self.encL(2)
+            self.servo(20)
+
+
+    def walk_it_by_yourself(self):
+        for x in range(2):
+            self.encR(18)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
