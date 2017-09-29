@@ -86,7 +86,7 @@ class Piggy(pigo.Pigo):
             self.encB(5)
 
     def cha_cha(self):
-        """Subroutine of dance/ moves right and left while shaking servo"""
+        """Subroutine of dance/ moves right, left, shakes servo"""
         for x in range(3):
             self.encR(3)
             self.servo_shake()
