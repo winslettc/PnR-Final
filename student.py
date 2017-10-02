@@ -120,7 +120,7 @@ class Piggy(pigo.Pigo):
         """Dance routine for robot"""
         print("\n---- LET'S DANCE ----\n")
         self.circle_spin()
-        self.wheelie
+        self.wheelie()
         self.circle_spin()
 
     def circle_spin(self):
