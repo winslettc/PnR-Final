@@ -17,13 +17,13 @@ class Piggy(pigo.Pigo):
         """The robot's constructor: sets variables and runs menu loop"""
         print("I have been instantiated!")
         # Our servo turns the sensor. What angle of the servo( ) method sets it straight?
-        self.MIDPOINT = 90
+        self.MIDPOINT = 95
         # YOU DECIDE: How close can an object get (cm) before we have to stop?
         self.STOP_DIST = 30
         # YOU DECIDE: What left motor power helps straighten your fwd()?
-        self.LEFT_SPEED = 140
+        self.LEFT_SPEED = 255
         # YOU DECIDE: What left motor power helps straighten your fwd()?
-        self.RIGHT_SPEED = 140
+        self.RIGHT_SPEED = 255
         # This one isn't capitalized because it changes during runtime, the others don't
         self.turn_track = 0
         # Our scan list! The index will be the degree and it will store distance
@@ -74,7 +74,7 @@ class Piggy(pigo.Pigo):
     def to_the_left(self):
         """subroutine of dance method/ turns left and then pulses four times"""
         for x in range(1):
-            self.encL(25)
+            self.encL(18)
             for x in range(4):
                 self.encF(10)
                 self.stop()
@@ -85,6 +85,7 @@ class Piggy(pigo.Pigo):
         for x in range(1):
             self.encR(15)
             for x in range (4):
+                self.set_speed(255,255)
                 self.encF(5)
                 self.encB(5)
 
@@ -95,12 +96,14 @@ class Piggy(pigo.Pigo):
             self.servo_shake()
             self.encL(3)
             self.servo_shake()
-            self.encR(9)
-            self.encL(9)
+            self.set_speed(50,50)
+            self.encR(18)
+            self.encL(18)
 
     def walk_it_by_yourself(self):
         """Moves in a full circle to the right then to the left"""
         for x in range(2):
+            self.set_speed(70,70)
             self.encR(18)
             self.stop()
             time.sleep(.2)
