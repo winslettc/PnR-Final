@@ -122,6 +122,7 @@ class Piggy(pigo.Pigo):
         self.circle_spin()
         self.wheelie()
         self.circle_spin()
+        self.servo_bob()
 
     def circle_spin(self):
         """Makes the robot spin in a 360 motion/ subroutine of break_dance"""
@@ -131,9 +132,17 @@ class Piggy(pigo.Pigo):
 
     def wheelie(self):
         """Makes the robot do a wheelie"""
-        for x in range (2):
+        for x in range (1):
             self.encF(5)
             self.encB(5)
+
+    def servo_bob(self):
+        """Moves servo like a full scan - like a head bob/scan"""
+        for x in range (1):
+            self.servo(30)
+            self.stop()
+            time.sleep(.5)
+            self.servo(150)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
