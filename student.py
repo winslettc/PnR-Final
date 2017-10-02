@@ -39,7 +39,8 @@ class Piggy(pigo.Pigo):
         ## This is a DICTIONARY, it's a list with custom index values
         # You may change the menu if you'd like to add an experimental method
         menu = {"n": ("Navigate forward", self.nav),
-                "d": ("Dance", self.dance),
+                "cs": ("Cupid Shuffle", self.cupid_shuffle),
+                "b": ("Break dance", self.break_dance),
                 "c": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
                 "q": ("Quit", quit_now)
@@ -53,8 +54,8 @@ class Piggy(pigo.Pigo):
         menu.get(ans, [None, error])[1]()
 
     # YOU DECIDE: How does your GoPiggy dance?
-    def dance(self):
-        """executes a series of methods that add up to a compound dance"""
+    def cupid_shuffle(self):
+        """executes a series of methods that add up to a cupid shuffle"""
         print("\n---- LET'S DANCE ----\n")
         ##### WRITE YOUR FIRST PROJECT HERE
         self.to_the_right()
@@ -71,6 +72,7 @@ class Piggy(pigo.Pigo):
                 self.encF(10)
                 self.stop()
                 time.sleep(.2)
+
     def to_the_left(self):
         """subroutine of dance method/ turns left and then pulses four times"""
         for x in range(1):
@@ -103,11 +105,10 @@ class Piggy(pigo.Pigo):
     def walk_it_by_yourself(self):
         """Moves in a full circle to the right then to the left"""
         for x in range(2):
-            self.set_speed(100,100)
-            self.encR(10)
+            self.set_speed(80,80)
+            self.encR(40)
             self.stop()
             time.sleep(.2)
-            self.encL(18)
 
     def servo_shake(self):
         """Subroutine of dance function/ moves servo head back and forth"""
@@ -115,6 +116,24 @@ class Piggy(pigo.Pigo):
             self.servo(70)
             self.servo(120)
 
+    def break_dance(self):
+        """Dance routine for robot"""
+        print("\n---- LET'S DANCE ----\n")
+        self.circle_spin()
+        self.wheelie
+        self.circle_spin()
+
+    def circle_spin(self):
+        """Makes the robot spin in a 360 motion/ subroutine of break_dance"""
+        for x in range (1):
+            self.set_speed(255,255)
+            self.encL(40)
+
+    def wheelie(self):
+        """Makes the robot do a wheelie"""
+        for x in range (2):
+            self.encF(5)
+            self.encB(5)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
