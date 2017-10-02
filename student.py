@@ -133,6 +133,7 @@ class Piggy(pigo.Pigo):
     def wheelie(self):
         """Makes the robot do a wheelie"""
         for x in range (1):
+            self.set_speed(255,255)
             self.encF(5)
             self.encB(5)
 
