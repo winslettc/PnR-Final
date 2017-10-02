@@ -144,6 +144,7 @@ class Piggy(pigo.Pigo):
             self.stop()
             time.sleep(.5)
             self.servo(150)
+            self.flush_scan()
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
