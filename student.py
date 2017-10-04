@@ -82,8 +82,6 @@ class Piggy(pigo.Pigo):
                 self.wide_scan()
             self.set_speed(80,80)
             self.right_rot()
-            self.stop()
-            time.sleep(.5)
             print("FINISHING!")
         return True
             # turn 90 degrees
