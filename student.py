@@ -19,7 +19,9 @@ class Piggy(pigo.Pigo):
         # Our servo turns the sensor. What angle of the servo( ) method sets it straight?
         self.MIDPOINT = 84
         # YOU DECIDE: How close can an object get (cm) before we have to stop?
-        self.STOP_DIST = 30
+        self.SAFE_STOP_DIST = 30
+        # YOU DECIDE: How close can an object get (cm) before we have to stop? immediately
+        self.HARD_STOP_DIST = 15
         # YOU DECIDE: What left motor power helps straighten your fwd()?
         self.LEFT_SPEED = 200
         # YOU DECIDE: What left motor power helps straighten your fwd()?
@@ -56,13 +58,31 @@ class Piggy(pigo.Pigo):
     # YOU DECIDE: How does your GoPiggy dance?
     def cupid_shuffle(self):
         """executes a series of methods that add up to a cupid shuffle"""
-        print("\n---- LET'S DANCE ----\n")
+        print("\n---- LET'S CUPID SHUFFLE ----\n")
         ##### WRITE YOUR FIRST PROJECT HERE
-        self.to_the_right()
-        self.to_the_left()
-        self.now_kick()
-        self.cha_cha()
-        self.walk_it_by_youself()
+        if self.safety_check():
+            self.to_the_right()
+            self.to_the_left()
+            self.now_kick()
+            self.cha_cha()
+            self.walk_it_by_youself()
+
+    def safety_check(self):
+        """Checks for safe and hard stop distances, also stops 90 degrees and scans"""
+        self.servo(self.MIDPOINT)   #Look straight ahead
+        if self.dist() < self.SAFE_STOP_DIST:
+            return False
+        #Loop 4 times
+        for x in range(4):
+            if not self.is_clear():
+                return False
+            self.right()
+            self.servo(30)
+            self.servo(120)
+
+        return True
+            # turn 90 degrees
+        #Scan again
 
     def to_the_right(self):
         """subroutine of dance method/ turns right and then pulses for times"""
@@ -118,11 +138,17 @@ class Piggy(pigo.Pigo):
 
     def break_dance(self):
         """Dance routine for robot"""
-        print("\n---- LET'S DANCE ----\n")
+        print("\n---- LET'S BREAK DANCE ----\n")
         self.circle_spin()
         self.wheelie()
         self.circle_spin()
         self.servo_bob()
+        self.square()
+        self.robot()
+
+    def robot(self):
+        """subroutine of break dance/ broken up moves with servo and driving"""
+        pass
 
     def circle_spin(self):
         """Makes the robot spin in a 360 motion/ subroutine of break_dance"""
@@ -139,12 +165,19 @@ class Piggy(pigo.Pigo):
 
     def servo_bob(self):
         """Moves servo like a full scan - like a head bob/scan"""
-        for x in range (1):
+        for x in range (3):
             self.servo(30)
             self.stop()
             time.sleep(.5)
             self.servo(150)
-            self.flush_scan()
+
+    def square(self):
+        """Drives the robot in a square"""
+        self.encF(10)
+        self.encR(10)
+        self.encB(10)
+        self.encL(10)
+        self.encR(10)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
