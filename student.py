@@ -77,7 +77,7 @@ class Piggy(pigo.Pigo):
             if not self.is_clear():
                 print("NOT GOING TO DANCE")
                 return False
-            print("SCANNING")
+            print("SCANNING!")
             if self.right_rot():
                 self.flush_scan()
             self.right_rot()
