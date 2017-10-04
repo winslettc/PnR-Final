@@ -78,17 +78,13 @@ class Piggy(pigo.Pigo):
                 print("NOT GOING TO DANCE")
                 return False
             print("SCANNING")
-            self.left()
+            self.right_rot()
             self.flush_scan()
             print("PREPARING!")
 
         return True
             # turn 90 degrees
         #Scan again
-
-    def left(self):
-        """Turns gopigo left by shutting off one motor"""
-        return write_i2c_block(address, left_cmd + [0, 0, 0])
 
     def to_the_right(self):
         """subroutine of dance method/ turns right and then pulses for times"""
