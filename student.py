@@ -76,9 +76,8 @@ class Piggy(pigo.Pigo):
         for x in range(4):
             if not self.is_clear():
                 return False
-            self.right()
-            self.servo(30)
-            self.servo(120)
+            self.encR(18)
+            self.flush_scan()
 
         return True
             # turn 90 degrees
