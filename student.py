@@ -71,13 +71,16 @@ class Piggy(pigo.Pigo):
         """Checks for safe and hard stop distances, also stops 90 degrees and scans"""
         self.servo(self.MIDPOINT)   #Look straight ahead
         if self.dist() < self.SAFE_STOP_DIST:
+            print("NOT GOING TO DANCE")
             return False
         #Loop 4 times
         for x in range(4):
             if not self.is_clear():
                 return False
-            self.encR(18)
+            print("SCANNING")
+            self.encR(4)
             self.flush_scan()
+            print("GETTING READY TO DANCE")
 
         return True
             # turn 90 degrees
