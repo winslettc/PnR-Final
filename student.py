@@ -78,9 +78,9 @@ class Piggy(pigo.Pigo):
             if not self.is_clear():
                 return False
             print("SCANNING")
-            self.encR(4)
+            self.encR(5)
             self.flush_scan()
-            print("GETTING READY TO DANCE")
+            print("PREPARING!")
 
         return True
             # turn 90 degrees
