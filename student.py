@@ -81,7 +81,7 @@ class Piggy(pigo.Pigo):
             while self.right_rot():
                 self.flush_scan()
             self.set_speed(80,80)
-            self.right_rot()
+            self.right_rot(10)
             print("PREPARING!")
         return True
             # turn 90 degrees
