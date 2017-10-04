@@ -73,7 +73,7 @@ class Piggy(pigo.Pigo):
         if self.dist() < self.SAFE_STOP_DIST:
             return False
         #Loop 4 times
-        for x in range(2):
+        for x in range(4):
             if not self.is_clear():
                 print("NOT GOING TO DANCE")
                 return False
@@ -81,7 +81,7 @@ class Piggy(pigo.Pigo):
             while self.right_rot():
                 self.flush_scan()
             self.set_speed(80,80)
-            self.right_rot(10)
+            self.right_rot()
             print("PREPARING!")
         return True
             # turn 90 degrees
