@@ -73,7 +73,7 @@ class Piggy(pigo.Pigo):
         if self.dist() < self.SAFE_STOP_DIST:
             return False
         #Loop 4 times
-        for x in range(4):
+        for x in range(3):
             if not self.is_clear():
                 print("NOT GOING TO DANCE")
                 return False
