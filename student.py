@@ -80,6 +80,7 @@ class Piggy(pigo.Pigo):
             print("SCANNING!")
             while self.right_rot():
                 self.flush_scan()
+            self.set_speed(80,80)
             self.right_rot()
             print("PREPARING!")
         return True
