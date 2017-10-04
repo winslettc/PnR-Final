@@ -79,6 +79,7 @@ class Piggy(pigo.Pigo):
                 return False
             print("SCANNING!")
             while self.right_rot():
+                self.servo(35)
                 self.flush_scan()
             self.set_speed(80,80)
             self.right_rot()
