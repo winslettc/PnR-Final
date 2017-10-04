@@ -79,9 +79,10 @@ class Piggy(pigo.Pigo):
                 return False
             print("SCANNING")
             self.right_rot()
+            self.stop()
+            time.sleep(.2)
             self.flush_scan()
             print("PREPARING!")
-
         return True
             # turn 90 degrees
         #Scan again
