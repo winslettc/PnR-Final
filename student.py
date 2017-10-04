@@ -71,20 +71,24 @@ class Piggy(pigo.Pigo):
         """Checks for safe and hard stop distances, also stops 90 degrees and scans"""
         self.servo(self.MIDPOINT)   #Look straight ahead
         if self.dist() < self.SAFE_STOP_DIST:
-            print("NOT GOING TO DANCE")
             return False
         #Loop 4 times
         for x in range(4):
             if not self.is_clear():
+                print("NOT GOING TO DANCE")
                 return False
             print("SCANNING")
-            self.encR(5)
+            self.left()
             self.flush_scan()
             print("PREPARING!")
 
         return True
             # turn 90 degrees
         #Scan again
+
+    def left(self):
+        """Turns gopigo left by shutting off one motor"""
+        return write_i2c_block(address, left_cmd + [0, 0, 0])
 
     def to_the_right(self):
         """subroutine of dance method/ turns right and then pulses for times"""
