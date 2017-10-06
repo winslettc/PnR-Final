@@ -78,7 +78,7 @@ class Piggy(pigo.Pigo):
         for x in range(3):
             if not self.is_clear():
                 return False
-            print("SCANNING!")
+            print("SCANNING")
             is_safe = True
             self.right_rot()
             for x in range(5):
