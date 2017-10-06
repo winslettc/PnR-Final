@@ -68,6 +68,7 @@ class Piggy(pigo.Pigo):
             self.walk_it_by_youself()
 
     def safety_check(self):
+        #HOW to make continuous scanning??? while rotating
         """Checks for safe and hard stop distances, also stops 90 degrees and scans"""
         self.servo(self.MIDPOINT)   #Look straight ahead
         if self.dist() < self.SAFE_STOP_DIST:
@@ -79,10 +80,10 @@ class Piggy(pigo.Pigo):
                 return False
             print("SCANNING!")
             while self.right_rot():
+                self.right_rot()
                 self.wide_scan()
-            self.set_speed(80,80)
-            self.right_rot()
-            print("FINISHING!")
+                self.set_speed(80,80)
+                print("FINISHING!")
         return True
             # turn 90 degrees
         #Scan again
