@@ -79,6 +79,16 @@ class Piggy(pigo.Pigo):
             if not self.is_clear():
                 return False
             print("SCANNING!")
+            is_safe = True
+            self.right_rot()
+            for x in range(5):
+                if self.dist()< self.SAFE_STOP_DIST:
+                    break
+                time.sleep(.5)
+            self.stop()
+            return is_safe
+
+
             while self.right_rot():
                 self.right_rot()
                 self.wide_scan()
