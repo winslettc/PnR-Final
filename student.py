@@ -193,13 +193,32 @@ class Piggy(pigo.Pigo):
         self.encL(10)
         self.encR(10)
 
+    def cruise(self):
+        """Drives robot forward while the coast is clear"""
+        self.fwd()
+        self.set_speed(120,120)
+        self.wide_scan()
+        print("DRIVING AND SCANNING")
+        while(self.dist() > self.SAFE_STOP_DIST):
+            time.sleep(.5)
+            self.stop()
+            print("NOT SAFE TO DRIVE")
+
+    def turn(self):
+        """Short turn- subunit of Encode functions"""
+        self.encF(10)
+
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         print("-------- [ Press CTRL + C to stop me ] --------\n")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-
+        while True:
+            if self.is_clear():
+                self.cruise()
+            else:
+                self.encR(turn)
 
 ###################################################
 ############### STATIC FUNCTIONS
