@@ -206,6 +206,7 @@ class Piggy(pigo.Pigo):
         self.encF(20)
         if self.dist() < self.SAFE_STOP_DIST:
             self.set_speed(100,250)
+            self.encF(250,100)
             time.sleep(.5)
         self.stop()
 
