@@ -212,7 +212,7 @@ class Piggy(pigo.Pigo):
             self.set_speed(100,100)
             self.fwd()
             while self.dist() > self.SAFE_STOP_DIST:
-            time.sleep(.5)
+                time.sleep(.5)
         self.stop()
 
 
