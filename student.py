@@ -208,7 +208,7 @@ class Piggy(pigo.Pigo):
             self.right_rot()
         if self.dist() > self.SAFE_STOP_DIST:
             self.nav()
-                time.sleep(.5)
+        time.sleep(.5)
         self.stop()
 
 
