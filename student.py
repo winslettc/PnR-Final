@@ -206,6 +206,7 @@ class Piggy(pigo.Pigo):
         """Tries to avoid an obstacle"""
         if self.dist() < self.SAFE_STOP_DIST:
             self.right_rot()
+            self.servo_shake()
         time.sleep(.5)
         self.stop()
 
