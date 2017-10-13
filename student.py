@@ -199,14 +199,12 @@ class Piggy(pigo.Pigo):
         self.set_speed(120,120)
         self.wide_scan()
         print("DRIVING AND SCANNING")
-        while(self.dist() > self.SAFE_STOP_DIST):
+        while(self.dist() < self.SAFE_STOP_DIST):
             time.sleep(.5)
             self.stop()
             print("STOPPING")
 
-    def turn(self):
-        """Short turn- subunit of Encode functions"""
-        self.encF(10)
+
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
@@ -218,7 +216,7 @@ class Piggy(pigo.Pigo):
             if self.is_clear():
                 self.cruise()
             else:
-                self.encR(turn)
+                self.choose_path()
 
 ###################################################
 ############### STATIC FUNCTIONS
