@@ -202,7 +202,7 @@ class Piggy(pigo.Pigo):
         while(self.dist() > self.SAFE_STOP_DIST):
             time.sleep(.5)
             self.stop()
-            print("NOT SAFE TO DRIVE")
+            print("STOPPING")
 
     def turn(self):
         """Short turn- subunit of Encode functions"""
