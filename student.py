@@ -199,10 +199,13 @@ class Piggy(pigo.Pigo):
         print("DRIVING")
         while self.dist() < self.SAFE_STOP_DIST:
             time.sleep(.5)
-            if False:
-                self.set_speed(40,255)
         self.stop()
         print("STOPPING")
+
+    def avoid(self):
+        self.fwd()
+        if self.dist() < self.SAFE_STOP_DIST:
+            self.set_speed(40,250)
 
 
     def nav(self):
@@ -215,7 +218,7 @@ class Piggy(pigo.Pigo):
             if self.is_clear():
                 self.cruise()
             else:
-                self.encR(10)
+                self.avoid()
 
 ###################################################
 ############### STATIC FUNCTIONS
