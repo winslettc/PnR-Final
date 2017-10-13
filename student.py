@@ -195,11 +195,11 @@ class Piggy(pigo.Pigo):
 
     def cruise(self):
         """Drives robot forward while the coast is clear"""
-        self.fwd()
-        self.set_speed(120,120)
-        self.wide_scan()
+        while self.fwd():
+            self.set_speed(120,120)
+            self.wide_scan()
         print("DRIVING AND SCANNING")
-        while(self.dist() < self.SAFE_STOP_DIST):
+        if (self.dist < self.SAFE_STOP_DIST):
             time.sleep(.5)
             self.stop()
             print("STOPPING")
