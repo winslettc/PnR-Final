@@ -203,7 +203,7 @@ class Piggy(pigo.Pigo):
         print("STOPPING")
 
     def avoid(self):
-        self.encF(20)
+        """Tries to avoid an obstacle"""
         if self.dist() < self.SAFE_STOP_DIST:
             self.right_rot()
         time.sleep(.5)
