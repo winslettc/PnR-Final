@@ -214,7 +214,7 @@ class Piggy(pigo.Pigo):
             if self.is_clear():
                 self.cruise()
             else:
-                self.choose_path()
+                self.encR(10)
 
 ###################################################
 ############### STATIC FUNCTIONS
