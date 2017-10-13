@@ -197,7 +197,7 @@ class Piggy(pigo.Pigo):
         """Drives robot forward while the coast is clear"""
         self.encF(15)
         print("DRIVING")
-        while self.dist() < self.SAFE_STOP_DIST:
+        while self.dist() > self.SAFE_STOP_DIST:
             time.sleep(.5)
         self.stop()
         print("STOPPING")
@@ -206,7 +206,12 @@ class Piggy(pigo.Pigo):
         self.encF(20)
         if self.dist() < self.SAFE_STOP_DIST:
             self.set_speed(100,250)
-            self.encF(250,100)
+            self.encF(5)
+            self.set_speed(250,100)
+            self.encF(5)
+            self.set_speed(100,100)
+            self.fwd()
+            while self.dist() > self.SAFE_STOP_DIST:
             time.sleep(.5)
         self.stop()
 
