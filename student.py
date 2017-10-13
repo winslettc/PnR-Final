@@ -199,9 +199,10 @@ class Piggy(pigo.Pigo):
         print("DRIVING")
         while self.dist() < self.SAFE_STOP_DIST:
             time.sleep(.5)
+            if False:
+                self.set_speed(40,255)
         self.stop()
         print("STOPPING")
-
 
 
     def nav(self):
