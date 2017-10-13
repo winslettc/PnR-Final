@@ -203,9 +203,11 @@ class Piggy(pigo.Pigo):
         print("STOPPING")
 
     def avoid(self):
-        self.fwd()
+        self.encF(20)
         if self.dist() < self.SAFE_STOP_DIST:
-            self.set_speed(40,250)
+            self.set_speed(100,250)
+            time.sleep(.5)
+        self.stop()
 
 
     def nav(self):
