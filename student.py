@@ -199,7 +199,7 @@ class Piggy(pigo.Pigo):
             self.set_speed(120,120)
             self.wide_scan()
         print("DRIVING AND SCANNING")
-        if (self.dist < self.SAFE_STOP_DIST):
+        if self.dist() < self.SAFE_STOP_DIST:
             time.sleep(.5)
             self.stop()
             print("STOPPING")
