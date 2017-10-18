@@ -46,6 +46,7 @@ class Piggy(pigo.Pigo):
                 "o": ("Obstacle Count", self.obstacle_count),
                 "c": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
+                "a": ("Avoid Obstacles", self.move_around_obstacle),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -241,7 +242,7 @@ class Piggy(pigo.Pigo):
             if distance and distance > safe:
                 self.nav()
         print("\n----Navigating----\n")
-          
+
 
 
 
