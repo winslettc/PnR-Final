@@ -215,7 +215,7 @@ class Piggy(pigo.Pigo):
 #How many obstacles are in front of your robot?
     def obstacle_count(self):
         """Scans and estimates the numbers of obstacles within sight"""
-        self.wide_scan()
+        self.wide_scan(count = 5)
         found_something = False
         counter = 0
         threshold = 100
