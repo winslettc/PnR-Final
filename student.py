@@ -236,7 +236,7 @@ class Piggy(pigo.Pigo):
 
     def move_around_obstacle(self):
         """Calculates where the object is and moves around it"""
-        self.choose_path(count = 6)
+        self.choose_path()
         safe = 150
         for distance in self.choose_path():
             if distance and distance > safe:
