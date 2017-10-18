@@ -236,11 +236,13 @@ class Piggy(pigo.Pigo):
 
     def move_around_obstacle(self):
         """Calculates where the object is and moves around it"""
-        self.choose_path()
+        self.choose_path(count = 6)
         safe = 150
         for distance in self.choose_path():
             if distance and distance > safe:
-                self.nav()
+                self.cruise()
+            time.sleep(.5)
+        sleep.stop()
         print("\n----Navigating----\n")
 
 
