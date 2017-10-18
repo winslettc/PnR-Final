@@ -43,6 +43,7 @@ class Piggy(pigo.Pigo):
         menu = {"n": ("Navigate forward", self.nav),
                 "cs": ("Cupid Shuffle", self.cupid_shuffle),
                 "b": ("Break dance", self.break_dance),
+                "o": ("Obstacle Count", self.obstacle_count),
                 "c": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
                 "q": ("Quit", quit_now)
@@ -51,7 +52,7 @@ class Piggy(pigo.Pigo):
         for key in sorted(menu.keys()):
             print(key + ":" + menu[key][0])
         # store the user's answer
-        ans = raw_input("Your selection: ")
+        ans = raw_input("\n----Your selection:----\n ")
         # activate the item selected
         menu.get(ans, [None, error])[1]()
 
@@ -196,20 +197,36 @@ class Piggy(pigo.Pigo):
     def cruise(self):
         """Drives robot forward while the coast is clear"""
         self.fwd()
-        print("DRIVING")
+        print("\n----DRIVING----\n")
         while self.dist() > self.SAFE_STOP_DIST:
             time.sleep(.5)
         self.stop()
-        print("STOPPING")
+        print("\n----STOPPING----\n")
 
     def avoid(self):
         """Tries to avoid an obstacle"""
-        if self.dist() < self.SAFE_STOP_DIST:
-            self.right_rot()
-            self.servo_shake()
-        time.sleep(.5)
+        for distance in self.wide_scan(count = 5):
+            if self.dist() < self.SAFE_STOP_DIST:
+                self.right_rot()
+                self.cruise()
+            time.sleep(.5)
         self.stop()
 
+#How many obstacles are in front of your robot?
+    def obstacle_count(self):
+        """Scans and estimates the numbers of obstacles within sight"""
+        self.wide_scan()
+        found_something = False
+        counter = 0
+        threshold = 100
+        for distance in self.scan:
+            if distance and distance < threshold and not found_something:
+                found_something = True
+                print ("\n----Object # %d found, I think----\n" % counter)
+            if distance and distance > threshold and found_something:
+                found_something = False
+                counter += 1
+        print("\n----I see %d objects----\n" % counter)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
