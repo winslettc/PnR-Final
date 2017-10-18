@@ -212,21 +212,31 @@ class Piggy(pigo.Pigo):
             time.sleep(.5)
         self.stop()
 
-#How many obstacles are in front of your robot?
+
     def obstacle_count(self):
         """Scans and estimates the numbers of obstacles within sight"""
-        self.wide_scan(count = 5)
-        found_something = False
-        counter = 0
-        threshold = 100
-        for distance in self.scan:
-            if distance and distance < threshold and not found_something:
-                found_something = True
-                print ("\n----Object # %d found, I think----\n" % counter)
-            if distance and distance > threshold and found_something:
-                found_something = False
-                counter += 1
-        print("\n----I see %d objects----\n" % counter)
+        for x in range(4):
+            self.wide_scan(count = 5)
+            found_something = False
+            counter = 0
+            threshold = 50
+            for distance in self.scan:
+                if distance and distance < threshold and not found_something:
+                    found_something = True
+                    print ("\n----Object # %d found, I think----\n" % counter)
+                if distance and distance > threshold and found_something:
+                    found_something = False
+                    counter += 1
+            print("\n----I see %d objects----\n" % counter)
+            self.right_turn()
+
+    def right_turn(self):
+        self.encR(9)
+
+    def move_around_obstacle(self):
+        """Calculates where the object is and moves around it"""
+        pass
+
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
