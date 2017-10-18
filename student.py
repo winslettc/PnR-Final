@@ -231,7 +231,7 @@ class Piggy(pigo.Pigo):
             self.right_turn()
 
     def right_turn(self):
-        self.encR(9)
+        self.encR(7)
 
     def move_around_obstacle(self):
         """Calculates where the object is and moves around it"""
