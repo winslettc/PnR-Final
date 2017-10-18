@@ -216,7 +216,7 @@ class Piggy(pigo.Pigo):
     def obstacle_count(self):
         """Scans and estimates the numbers of obstacles within sight"""
         for x in range(4):
-            self.wide_scan(count = 10)
+            self.wide_scan(count = 6)
             found_something = False
             counter = 0
             threshold = 50
@@ -235,7 +235,14 @@ class Piggy(pigo.Pigo):
 
     def move_around_obstacle(self):
         """Calculates where the object is and moves around it"""
-        pass
+        self.choose_path()
+        safe = 150
+        for distance in self.choose_path():
+            if distance and distance > safe:
+                self.nav()
+        print("\n----Navigating----\n")
+          
+
 
 
     def nav(self):
@@ -249,7 +256,7 @@ class Piggy(pigo.Pigo):
                 if self.is_clear():
                     self.cruise()
                 else:
-                    self.avoid()
+                    self.obstacle_count()
 
 ###################################################
 ############### STATIC FUNCTIONS
