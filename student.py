@@ -215,36 +215,91 @@ class Piggy(pigo.Pigo):
 
 
     def obstacle_count(self):
-        """Scans and estimates the numbers of obstacles within sight"""
-        for x in range(4):
-            self.wide_scan(count = 6)
-            found_something = False
-            counter = 0
-            threshold = 50
-            for distance in self.scan:
-                if distance and distance < threshold and not found_something:
-                    found_something = True
-                    print ("\n----Object # %d found, I think----\n" % counter)
-                if distance and distance > threshold and found_something:
-                    found_something = False
-                    counter += 1
-            print("\n----I see %d objects----\n" % counter)
-            self.right_turn()
+        """Scans and estimates the numbers of obstacles within sight in a 360 view"""
+        self.wide_scan(count = 6)
+        found_something = False
+        counter = 0
+        threshold = 50
+        for distance in self.scan:
+            if distance and distance < threshold and not found_something:
+                found_something = True
+                counter +=1
+                print ("\n----Object # %d found, I think----\n" % counter)
+            if distance and distance > threshold and found_something:
+                found_something = False
+                counter += 0
+        #print("\n----I see %d objects----\n" % counter)
+        self.right_turn()
+        return counter
 
     def right_turn(self):
-        self.encR(7)
+        """Subfunction of obstacle_count- robot performs a 90 degree right turn for 360 degree view of obstacles around"""
+        count=0
+        for x in range(4):
+            count += self.obstacle_count()
+            self.encR(7)
+        print(count)
 
     def move_around_obstacle(self):
         """Calculates where the object is and moves around it"""
-        self.choose_path()
+        self.my_choose_path()
         safe = 150
         for distance in self.choose_path():
-            if distance and distance > safe:
+            if distance > safe:
                 self.cruise()
             time.sleep(.5)
         sleep.stop()
         print("\n----Navigating----\n")
 
+
+    def avoid_left(self):
+        """Subunit of my_choose_path function. Moves robot left to avoid obstacles right"""
+        self.encL(7)
+        self.encF(5)
+        self.encL(10)
+        if self.dist() > self.SAFE_STOP_DIST():
+            self.cruise()
+            print("\n----Moving Left----\n")
+
+    def avoid_right(self):
+        """Subunit of my_choose_path function. Moves robot right to avoid obstacles left"""
+        self.encR(7)
+        self.encF(5)
+        self.encL(10)
+        if self.dist() > self.SAFE_STOP_DIST():
+            self.cruise()
+        print("\n----Moving Right----\n")
+
+    def my_choose_path(self):
+        """averages distance on either side of midpoint and moves to avoid the object"""
+        print("\n----Considering options...----\n")
+        if self.is_clear():
+            return "fwd"
+        else:
+            self.encR(7)
+        avgRight = 0
+        avgLeft = 0
+        for x in range(self.MIDPOINT - 60, self.MIDPOINT):
+            if self.scan[x]:
+                avgRight += self.scan[x]
+        avgRight /= 60
+        print("\n----The average dist on the right is ' + str(avgRight) + 'cm'----\n")
+        logging.info('The average dist on the right is ' + str(avgRight) + 'cm')
+        for x in range(self.MIDPOINT, self.MIDPOINT + 60):
+            if self.scan[x]:
+                avgLeft += self.scan[x]
+        avgLeft /= 60
+        print('The average dist on the left is ' + str(avgLeft) + 'cm')
+        logging.info('The average dist on the left is ' + str(avgLeft) + 'cm')
+        if avgRight > avgLeft:
+            return "right"
+        else:
+            return "left"
+        while True:
+            if "right":
+                avoid_right()
+        while False:
+                avoid_left()
 
 
 
