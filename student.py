@@ -43,7 +43,7 @@ class Piggy(pigo.Pigo):
         menu = {"n": ("Navigate forward", self.nav),
                 "cs": ("Cupid Shuffle", self.cupid_shuffle),
                 "b": ("Break dance", self.break_dance),
-                "fc": ("Full Count", self.full_count()),
+                "fc": ("Full Count", self.full_count),
                 "c": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
                 "a": ("Avoid Obstacles", self.move_around_obstacle),
