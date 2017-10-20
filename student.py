@@ -257,16 +257,16 @@ class Piggy(pigo.Pigo):
         self.encF(5)
         self.encL(10)
         if self.dist() > self.SAFE_STOP_DIST():
-            self.cruise()
+            self.fwd()
         print("\n----Moving Right----\n")
         if self.dist() < self.SAFE_STOP_DIST():
-            self.avoid_right()
+            self.avoid_left()
 
     def my_choose_path(self):
         """averages distance on either side of midpoint and moves to avoid the object"""
         print("\n----Considering options...----\n")
         if self.is_clear():
-            return cruise
+            return fwd()
         else:
             self.avoid_right()
 
