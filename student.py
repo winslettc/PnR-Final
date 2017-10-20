@@ -43,7 +43,7 @@ class Piggy(pigo.Pigo):
         menu = {"n": ("Navigate forward", self.nav),
                 "cs": ("Cupid Shuffle", self.cupid_shuffle),
                 "b": ("Break dance", self.break_dance),
-                "o": ("Obstacle Count", self.obstacle_count),
+                "fc": ("Full Count", self.full_count()),
                 "c": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
                 "a": ("Avoid Obstacles", self.move_around_obstacle),
@@ -244,11 +244,7 @@ class Piggy(pigo.Pigo):
     def move_around_obstacle(self):
         """Calculates where the object is and moves around it"""
         self.my_choose_path()
-        safe = 150
-        for distance in self.choose_path():
-            if distance > safe:
-                self.cruise()
-            time.sleep(.5)
+        time.sleep(.5)
         sleep.stop()
         print("\n----Navigating----\n")
 
