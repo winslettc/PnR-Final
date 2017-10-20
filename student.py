@@ -235,7 +235,7 @@ class Piggy(pigo.Pigo):
     def right_turn(self):
         """Subfunction of obstacle_count- robot performs a 90 degree right turn for 360 degree view of obstacles around"""
         count=0
-        for x in range(4):
+        for x in range(1):
             count += self.obstacle_count()
             self.encR(7)
         print(count)
