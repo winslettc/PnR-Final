@@ -204,14 +204,6 @@ class Piggy(pigo.Pigo):
         self.stop()
         print("\n----STOPPING----\n")
 
-    def avoid(self):
-        """Tries to avoid an obstacle"""
-        for distance in self.wide_scan(count = 5):
-            if self.dist() < self.SAFE_STOP_DIST:
-                self.right_rot()
-                self.cruise()
-            time.sleep(.5)
-        self.stop()
 
     def full_count(self):
         """360 degree view of obstacles around"""
@@ -239,6 +231,7 @@ class Piggy(pigo.Pigo):
         return counter
 
     def right_turn(self):
+        """"90 degree right turn"""
         self.encR(7)
 
     def move_around_obstacle(self):
@@ -266,39 +259,16 @@ class Piggy(pigo.Pigo):
         if self.dist() > self.SAFE_STOP_DIST():
             self.cruise()
         print("\n----Moving Right----\n")
+        if self.dist() < self.SAFE_STOP_DIST():
+            self.avoid_right()
 
     def my_choose_path(self):
         """averages distance on either side of midpoint and moves to avoid the object"""
         print("\n----Considering options...----\n")
         if self.is_clear():
-            return "fwd"
+            return cruise
         else:
-            self.encR(7)
-        avgRight = 0
-        avgLeft = 0
-        for x in range(self.MIDPOINT - 60, self.MIDPOINT):
-            if self.scan[x]:
-                avgRight += self.scan[x]
-        avgRight /= 60
-        print("\n----The average dist on the right is ' + str(avgRight) + 'cm'----\n")
-        logging.info('The average dist on the right is ' + str(avgRight) + 'cm')
-        for x in range(self.MIDPOINT, self.MIDPOINT + 60):
-            if self.scan[x]:
-                avgLeft += self.scan[x]
-        avgLeft /= 60
-        print('The average dist on the left is ' + str(avgLeft) + 'cm')
-        logging.info('The average dist on the left is ' + str(avgLeft) + 'cm')
-        if avgRight > avgLeft:
-            return "right"
-        else:
-            return "left"
-        while True:
-            if "right":
-                avoid_right()
-        while False:
-                avoid_left()
-
-
+            self.avoid_right()
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
