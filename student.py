@@ -213,6 +213,13 @@ class Piggy(pigo.Pigo):
             time.sleep(.5)
         self.stop()
 
+    def full_count(self):
+        """360 degree view of obstacles around"""
+        count=0
+        for x in range(4):
+            count += self.obstacle_count()
+            self.right_turn()
+        print(count)
 
     def obstacle_count(self):
         """Scans and estimates the numbers of obstacles within sight in a 360 view"""
@@ -229,16 +236,10 @@ class Piggy(pigo.Pigo):
                 found_something = False
                 counter += 0
         print("\n----I see %d objects----\n" % counter)
-        self.right_turn()
         return counter
 
     def right_turn(self):
-        """Subfunction of obstacle_count- robot performs a 90 degree right turn for 360 degree view of obstacles around"""
-        count=0
-        for x in range(1):
-            count += self.obstacle_count()
-            self.encR(7)
-        print(count)
+        self.encR(7)
 
     def move_around_obstacle(self):
         """Calculates where the object is and moves around it"""
