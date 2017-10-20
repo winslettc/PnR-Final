@@ -228,7 +228,7 @@ class Piggy(pigo.Pigo):
             if distance and distance > threshold and found_something:
                 found_something = False
                 counter += 0
-        #print("\n----I see %d objects----\n" % counter)
+        print("\n----I see %d objects----\n" % counter)
         self.right_turn()
         return counter
 
