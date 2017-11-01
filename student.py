@@ -289,10 +289,10 @@ class Piggy(pigo.Pigo):
         largest_angle = 0
         init_space = 360
         """scan it 18 encoders"""
-        for x in range(4):
+        for x in range(3):
             #Changed to 4, so it will correlate with my right turn function to create a 360 view
              """take the distances first"""
-             self.wide_scan()
+             self.wide_scan(count = 6)
              for angle, dist in enumerate(self.scan):
                  if dist:
                      """if it's a free space"""
@@ -310,7 +310,7 @@ class Piggy(pigo.Pigo):
                         width.append(int(angle - init_space))
                         angle_go.append(int(angle + init_space) / 2)
                  """90 right turn to scan space"""
-                 self.right_turn()
+                 self.encL(10)
                  #Previously an encode left (10) function was here important?
              """Compares angle measurements to determine which width = largest"""
              for number, ang in enumerate(width):
@@ -319,9 +319,9 @@ class Piggy(pigo.Pigo):
                         """set a the largest angle to be that newly found one"""
                         largest_angle = ang
                         """definitive largest angle is named"""
-             self.servo(self.midpoint)
-             self.encL(int(angle_go[largest_angle] / 12))
-             self.cruise()
+        self.servo(self.midpoint)
+        self.encL(int(angle_go[largest_angle] / 12))
+        self.cruise()
 
 
 ###################################################
