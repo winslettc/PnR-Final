@@ -273,12 +273,12 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         print("-------- [ Press CTRL + C to stop me ] --------\n")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-        for x in range(10):
+        for x in range(1):
             while True:
                 if self.is_clear():
                     self.cruise()
                 else:
-                    self.obstacle_count()
+                    self.full_count()
 
     def safest_path(self):
         """find the safest way to travel; safest is the way with most space btwn obstacles"""\
