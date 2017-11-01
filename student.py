@@ -46,7 +46,7 @@ class Piggy(pigo.Pigo):
                 "fc": ("Full Count", self.full_count),
                 "c": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
-                "a": ("Avoid Obstacles", self.move_around_obstacle),
+                "a": ("Avoid Obstacles", self.safest_path),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -204,7 +204,19 @@ class Piggy(pigo.Pigo):
         self.stop()
         print("\n----STOPPING----\n")
 
+    def drive_to_avoid(self):
+        """Infinite loop to scan and avoid obstacles"""
+        while True:
+            if is_clear:
+                # Counts obstacles and double checks
+                self.obstacle_count()
+                #Fwd while dist> safe stop dist
+                self.cruise()
+            else:
+                #Picks the safest path and avoids obstacles based on the free space
+                self.safest_path()
 
+    #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
         """360 degree view of obstacles around"""
         count=0
@@ -213,6 +225,7 @@ class Piggy(pigo.Pigo):
             self.right_turn()
         print(count)
 
+    #widescan counter
     def obstacle_count(self):
         """Scans and estimates the numbers of obstacles within sight in a 360 view"""
         self.wide_scan(count = 6)
@@ -234,16 +247,6 @@ class Piggy(pigo.Pigo):
         """"90 degree right turn"""
         self.encR(7)
 
-    def move_around_obstacle(self):
-        """Calculates where the object is and moves around it"""
-        self.obstacle_count()
-        if found_something:
-            self.avoid_right()
-        else:
-            self.fwd()
-        print("\n----Navigating----\n")
-
-
     def avoid_left(self):
         """Subunit of my_choose_path function. Moves robot left to avoid obstacles right"""
         self.encL(7)
@@ -264,14 +267,6 @@ class Piggy(pigo.Pigo):
         if self.dist() < self.SAFE_STOP_DIST():
             self.avoid_left()
 
-    def my_choose_path(self):
-        """averages distance on either side of midpoint and moves to avoid the object"""
-        print("\n----Considering options...----\n")
-        if self.is_clear():
-            return fwd()
-        else:
-            self.avoid_right()
-
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
@@ -284,6 +279,50 @@ class Piggy(pigo.Pigo):
                     self.cruise()
                 else:
                     self.obstacle_count()
+
+    def safest_path(self):
+        """find the safest way to travel; safest is the way with most space btwn obstacles"""\
+        """create all lists and set variables to be overwritten"""
+        angle_go = []
+        width = []
+        free_space = 0
+        largest_angle = 0
+        init_space = 360
+        """scan it 18 encoders"""
+        for x in range(4):
+            #Changed to 4, so it will correlate with my right turn function to create a 360 view
+             """take the distances first"""
+             self.wide_scan()
+             for angle, dist in enumerate(self.scan):
+                 if dist:
+                     """if it's a free space"""
+                     if int(dist) > 90:
+                         """and it's the start of said space"""
+                     if free_space == 0:
+                        """declare where the space starts"""
+                        init_space = angle
+                     """add width of space"""
+                     free_space += 1
+                     """but if it is an object, not a free space"""
+                     if int(dist) < 90:
+                        """the space has ended; width and angle measurement added to the list"""
+                        free_space = 0
+                        width.append(int(angle - init_space))
+                        angle_go.append(int(angle + init_space) / 2)
+                 """90 right turn to scan space"""
+                 self.right_turn()
+                 #Previously an encode left (10) function was here important?
+             """Compares angle measurements to determine which width = largest"""
+             for number, ang in enumerate(width):
+                    """if there's a newly discovered largest angle"""
+                    if ang > largest_angle:
+                        """set a the largest angle to be that newly found one"""
+                        largest_angle = ang
+                        """definitive largest angle is named"""
+             self.servo(self.midpoint)
+             self.encL(int(angle_go[largest_angle] / 12))
+             self.cruise()
+
 
 ###################################################
 ############### STATIC FUNCTIONS
