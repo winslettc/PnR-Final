@@ -47,6 +47,7 @@ class Piggy(pigo.Pigo):
                 "c": ("Calibrate", self.calibrate),
                 "s": ("Check status", self.status),
                 "a": ("Avoid Obstacles", self.safest_path),
+                "tr": ("Test Restore Method", self.test_restore),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
