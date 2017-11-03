@@ -249,14 +249,11 @@ class Piggy(pigo.Pigo):
 
     def restore_heading(self):
         """returns robot to original heading/ straightens out to original orientation"""
-        """
-        Uses self.turn_track to reorient to original heading
-        """
-        print("\n----Restoring Heading...----\n")
         if self.turn_track > 0:
             self.encL(abs(self.turn_track))
         elif self.turn_track < 0:
             self.encR(abs(self.turn_track))
+        print("\n----Restoring Heading...----\n")
 
 
     def test_restore(self):
