@@ -269,7 +269,6 @@ class Piggy(pigo.Pigo):
         self.encR(12)
         print("Turn track is currently: %d" % self.turn_track)
         self.encL(20)
-        time.sleep(2)
         #Move robot so restore method can be tested
         print("\n----Testing Restore Method...----\n")
         self.restore_heading()
