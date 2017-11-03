@@ -347,23 +347,6 @@ class Piggy(pigo.Pigo):
         print("\n----Cruising----\n")
 #Moving in an infinite circle-- fix this
 
-    def encR(self, enc, m1=1, m2=1):
-        """sets encoder, right_rot, += turn_track, (18 = 1 wheel rot)"""
-        print('Moving '+str((enc/18))+' rotation(s) right')
-        enc_tgt(m1, m2, enc)
-        right_rot()
-        self.turn_track += enc
-        print("Turn track is currently: %d" % self.turn_track)
-
-    def encL(self, enc, m1=1, m2=1):
-        """sets encoder, right_rot, -= turn_track, (18 = 1 wheel rot)"""
-        print('Moving '+str((enc/18))+' rotation(s) left')
-        enc_tgt(m1, m2, enc)
-        left_rot()
-        self.turn_track -= enc
-        print("Turn track is currently: %d" % self.turn_track)
-
-
 
 ###################################################
 ############### STATIC FUNCTIONS
