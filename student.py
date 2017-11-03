@@ -1,6 +1,7 @@
 import pigo
 import time  # import just in case students need
 import random
+from gopigo import *
 
 # setup logs
 import logging
