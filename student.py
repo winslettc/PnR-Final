@@ -262,11 +262,10 @@ class Piggy(pigo.Pigo):
     def test_restore(self):
         """Tests restore heading method to determine usability"""
         print("\n----Moving All about...----\n")
+        self.set_speed(80,80)
         self.servo(self.MIDPOINT)
         self.encR(5)
         self.encL(10)
-        for x in range(2):
-            self.encR(10)
         self.right_rot()
         print("\n----Testing Restore Method...----\n")
         self.restore_heading()
