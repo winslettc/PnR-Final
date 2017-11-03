@@ -69,37 +69,6 @@ class Piggy(pigo.Pigo):
             self.cha_cha()
             self.walk_it_by_youself()
 
-    def safety_check(self):
-        #HOW to make continuous scanning??? while rotating
-        """Checks for safe and hard stop distances, also stops 90 degrees and scans"""
-        self.servo(self.MIDPOINT)   #Look straight ahead
-        if self.dist() < self.SAFE_STOP_DIST:
-            print("NOT GOING TO DANCE")
-            return False
-        #Loop 4 times
-        for x in range(3):
-            if not self.is_clear():
-                return False
-            print("SCANNING")
-            is_safe = True
-            self.right_rot()
-            for x in range(5):
-                if self.dist()< self.SAFE_STOP_DIST:
-                    break
-                time.sleep(.5)
-            self.stop()
-            return is_safe
-
-
-            while self.right_rot():
-                self.right_rot()
-                self.wide_scan()
-                self.set_speed(80,80)
-                print("FINISHING!")
-        return True
-            # turn 90 degrees
-        #Scan again
-
     def to_the_right(self):
         """subroutine of dance method/ turns right and then pulses for times"""
         for x in range(1):
@@ -195,6 +164,38 @@ class Piggy(pigo.Pigo):
         self.encL(10)
         self.encR(10)
 
+    #END OF DANCE METHODS
+    #BEGINNING OF NAVIGATION METHODS
+
+    def safety_check(self):
+        #HOW to make continuous scanning??? while rotating
+        """Checks for safe and hard stop distances, also stops 90 degrees and scans"""
+        self.servo(self.MIDPOINT)   #Look straight ahead
+        if self.dist() < self.SAFE_STOP_DIST:
+            print("NOT GOING TO DANCE")
+            return False
+        #Loop 4 times
+        for x in range(3):
+            if not self.is_clear():
+                return False
+            print("SCANNING")
+            is_safe = True
+            self.right_rot()
+            for x in range(5):
+                if self.dist()< self.SAFE_STOP_DIST:
+                    break
+                time.sleep(.5)
+            self.stop()
+            return is_safe
+            while self.right_rot():
+                self.right_rot()
+                self.wide_scan()
+                self.set_speed(80,80)
+                print("FINISHING!")
+        return True
+            # turn 90 degrees
+        #Scan again
+
     def cruise(self):
         """Drives robot forward while the coast is clear"""
         self.fwd()
@@ -208,8 +209,6 @@ class Piggy(pigo.Pigo):
         """Infinite loop to scan and avoid obstacles"""
         while True:
             if is_clear:
-                # Counts obstacles and double checks
-                self.obstacle_count()
                 #Fwd while dist> safe stop dist
                 self.cruise()
             else:
@@ -247,25 +246,30 @@ class Piggy(pigo.Pigo):
         """"90 degree right turn"""
         self.encR(7)
 
-    def avoid_left(self):
-        """Subunit of my_choose_path function. Moves robot left to avoid obstacles right"""
-        self.encL(7)
-        self.encF(5)
-        self.encL(10)
-        if self.dist() > self.SAFE_STOP_DIST():
-            self.cruise()
-            print("\n----Moving Left----\n")
+    def restore_heading(self):
+        """returns robot to original heading/ straightens out to original orientation"""
+        """
+        Uses self.turn_track to reorient to original heading
+        """
+        print("\n----Restoring Heading...----\n")
+        if self.turn_track > 0:
+            self.encL(abs(self.turn_track))
+        elif self.turn_track < 0:
+            self.encR(abs(self.turn_track))
 
-    def avoid_right(self):
-        """Subunit of my_choose_path function. Moves robot right to avoid obstacles left"""
-        self.encR(7)
-        self.encF(5)
+
+    def test_restore(self):
+        """Tests restore heading method to determine usability"""
+        print("\n----Moving All about...----\n")
+        self.servo(self.MIDPOINT)
+        self.encR(5)
         self.encL(10)
-        if self.dist() > self.SAFE_STOP_DIST():
-            self.fwd()
-        print("\n----Moving Right----\n")
-        if self.dist() < self.SAFE_STOP_DIST():
-            self.avoid_left()
+        for x in range(2):
+            self.encR(10)
+        self.right_rot()
+        print("\n----Testing Restore Method...----\n")
+        self.restore_heading()
+        print("\n---Restored to original heading----\n")
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
@@ -290,27 +294,33 @@ class Piggy(pigo.Pigo):
         init_space = 360
         """scan it 18 encoders"""
         for x in range(3):
-            #Changed to 4, so it will correlate with my right turn function to create a 360 view
              """take the distances first"""
              self.wide_scan(count = 6)
-             for angle, dist in enumerate(self.scan):
+             print ("\n----Scanning for free space...----\n")
+             for dist in enumerate(self.scan):
+                 #In terms of angles (fix this?)
                  if dist:
                      """if it's a free space"""
-                     if int(dist) > 90:
+                     if distance > 90:
+                         print("\n----There is free space ahead----\n")
                          """and it's the start of said space"""
+                         #Print if there is free space
                      if free_space == 0:
                         """declare where the space starts"""
-                        init_space = angle
+                        init_space = distance
                      """add width of space"""
                      free_space += 1
                      """but if it is an object, not a free space"""
-                     if int(dist) < 90:
+                     #Print if there is an object
+                     if distance < 90:
+                        print("\n----There is no free space ahead----\n")
                         """the space has ended; width and angle measurement added to the list"""
                         free_space = 0
-                        width.append(int(angle - init_space))
+                        width.append(distance - init_space)
                         angle_go.append(int(angle + init_space) / 2)
                  """90 right turn to scan space"""
                  self.encL(10)
+                 print("\n----Turning Right to Scan----\n")
                  #Previously an encode left (10) function was here important?
              """Compares angle measurements to determine which width = largest"""
              for number, ang in enumerate(width):
@@ -319,9 +329,16 @@ class Piggy(pigo.Pigo):
                         """set a the largest angle to be that newly found one"""
                         largest_angle = ang
                         """definitive largest angle is named"""
-        self.servo(self.midpoint)
+        self.servo(self.MIDPOINT)
+        print("\n----Setting Midpoint----\n")
         self.encL(int(angle_go[largest_angle] / 12))
+        print("\n----Turning to greatest free space----\n")
         self.cruise()
+        print("\n----Cruising----\n")
+#Moving in an infinite circle-- fix this
+
+
+
 
 
 ###################################################
