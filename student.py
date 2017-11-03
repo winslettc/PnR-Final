@@ -256,7 +256,7 @@ class Piggy(pigo.Pigo):
         elif self.turn_track < 0:
             self.encR(abs(self.turn_track))
             #Turn right to ab value of turn track
-            print("Turn track is currently: %d" % self.turn_track)
+        print("Turn track is currently: %d" % self.turn_track)
 
     def test_restore(self):
         """Tests restore heading method to determine usability"""
