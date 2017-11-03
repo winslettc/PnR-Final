@@ -256,19 +256,17 @@ class Piggy(pigo.Pigo):
         elif self.turn_track < 0:
             self.encR(abs(self.turn_track))
             #Turn right to ab value of turn track
-        print("\n----Restoring Heading: %d----\n" % self.turn_track)
-
 
     def test_restore(self):
         """Tests restore heading method to determine usability"""
-        print("\n----Moving All about...----\n")
         print("Turn track is currently: %d" % self.turn_track)
         self.set_speed(80,80)
         self.servo(self.MIDPOINT)
         #Set speed and move servo to midpoint
+        print("\n---Moving Right---\n")
         self.encR(12)
         print("Turn track is currently: %d" % self.turn_track)
-        self.encL(20)
+        self.encL(5)
         #Move robot so restore method can be tested
         print("\n----Testing Restore Method...----\n")
         self.restore_heading()
@@ -348,7 +346,6 @@ class Piggy(pigo.Pigo):
         self.cruise()
         print("\n----Cruising----\n")
 #Moving in an infinite circle-- fix this
-
 
     def encR(self, enc, m1=1, m2=1):
         """sets encoder, right_rot, += turn_track, (18 = 1 wheel rot)"""
