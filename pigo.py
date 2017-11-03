@@ -124,6 +124,7 @@ class Pigo(object):
         enc_tgt(m1, m2, enc)
         right_rot()
         self.turn_track += enc
+        print("Turn track is currently: %d" % self.turn_track)
         time.sleep(1 * (enc / 18)+.4)
 
     def encL(self, enc, m1=1, m2=1):
@@ -132,6 +133,7 @@ class Pigo(object):
         enc_tgt(m1, m2, enc)
         left_rot()
         self.turn_track -= enc
+        print("Turn track is currently: %d" % self.turn_track)
         time.sleep(1*(enc/18)+.4)
 
     def encB(self, enc, m1=1, m2=1):

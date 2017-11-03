@@ -261,10 +261,12 @@ class Piggy(pigo.Pigo):
     def test_restore(self):
         """Tests restore heading method to determine usability"""
         print("\n----Moving All about...----\n")
+        print("Turn track is currently: %d" % self.turn_track)
         self.set_speed(80,80)
         self.servo(self.MIDPOINT)
         #Set speed and move servo to midpoint
         self.encR(12)
+        print("Turn track is currently: %d" % self.turn_track)
         self.encL(20)
         time.sleep(2)
         #Move robot so restore method can be tested
