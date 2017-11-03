@@ -256,6 +256,7 @@ class Piggy(pigo.Pigo):
         elif self.turn_track < 0:
             self.encR(abs(self.turn_track))
             #Turn right to ab value of turn track
+            print("Turn track is currently: %d" % self.turn_track)
 
     def test_restore(self):
         """Tests restore heading method to determine usability"""
@@ -265,11 +266,11 @@ class Piggy(pigo.Pigo):
         #Set speed and move servo to midpoint
         print("\n---Moving Right---\n")
         self.encR(12)
-        print("Turn track is currently: %d" % self.turn_track)
+        print("\n---Moving Left---\n")
         self.encL(5)
         time.sleep(1)
         #Move robot so restore method can be tested
-        print("\n----Testing Restore Method...----\n")
+        print("\n----Testing Restore Method...----\n")\
         self.restore_heading()
         #Run restore method
         print("\n---Restored to original heading----\n")
