@@ -251,9 +251,11 @@ class Piggy(pigo.Pigo):
         """returns robot to original heading/ straightens out to original orientation"""
         if self.turn_track > 0:
             self.encL(abs(self.turn_track))
+            #Turn left to the absolute value or turn track
         elif self.turn_track < 0:
             self.encR(abs(self.turn_track))
-        print("\n----Restoring Heading...----\n")
+            #Turn right to ab value of turn track
+        print("\n----Restoring Heading: %d----\n" % self.turn_track)
 
 
     def test_restore(self):
@@ -261,24 +263,36 @@ class Piggy(pigo.Pigo):
         print("\n----Moving All about...----\n")
         self.set_speed(80,80)
         self.servo(self.MIDPOINT)
+        #Set speed and move servo to midpoint
         self.encR(12)
         self.encL(20)
+        time.sleep(2)
+        #Move robot so restore method can be tested
         print("\n----Testing Restore Method...----\n")
         self.restore_heading()
+        #Run restore method
         print("\n---Restored to original heading----\n")
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-        print("-------- [ Press CTRL + C to stop me ] --------\n")
-        print("-----------! NAVIGATION ACTIVATED !------------\n")
-        for x in range(1):
-            while True:
-                if self.is_clear():
-                    self.cruise()
-                else:
-                    self.full_count()
+        #Run obstacle count
+            #If return = 0
+            #Cruise
+        #if cruise stops
+            #Run safest path
+            #Restore heading/ (build function with safest path and heading/ incorporate)
+
+        #Else:
+            #Run safest path
+
+        while True:
+            #Turns on navigation method
+            if self.is_clear():
+                self.cruise()
+            else:
+                self.full_count()
 
     def safest_path(self):
         """find the safest way to travel; safest is the way with most space btwn obstacles"""\
