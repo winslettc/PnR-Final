@@ -270,7 +270,7 @@ class Piggy(pigo.Pigo):
         self.encL(5)
         time.sleep(1)
         #Move robot so restore method can be tested
-        print("\n----Testing Restore Method...----\n")\
+        print("\n----Testing Restore Method...----\n")
         self.restore_heading()
         #Run restore method
         print("\n---Restored to original heading----\n")
