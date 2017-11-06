@@ -321,11 +321,10 @@ class Piggy(pigo.Pigo):
 
     def driving(self):
         """Drives fwd while scanning"""
+        self.fwd()
         while self.fwd:
             self.mid_scan(count=4)
-            if distance > self.SAFE_STOP_DIST:
-                self.fwd()
-            else:
+            if distance < self.SAFE_STOP_DIST:
                 self.stop()
 
     def mid_scan(self, count=2):
