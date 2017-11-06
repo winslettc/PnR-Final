@@ -314,6 +314,7 @@ class Piggy(pigo.Pigo):
         while right_rot():
             self.servo(self.MIDPOINT)
             if self.dist() > self.SAFE_STOP_DIST:
+                time.sleep(.2)
                 self.stop()
 
     def driving(self):
