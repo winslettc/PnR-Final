@@ -311,9 +311,11 @@ class Piggy(pigo.Pigo):
     def safe_turn(self):
         """rotate until path is clear"""
         self.right_rot()
+        self.set_speed(80,80)
         while right_rot():
             self.servo(self.MIDPOINT)
             if self.dist() > self.SAFE_STOP_DIST:
+                print("\n----Found a Clear Stopping Distance----\n")
                 time.sleep(.2)
                 self.stop()
 
