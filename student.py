@@ -209,13 +209,11 @@ class Piggy(pigo.Pigo):
 
     def drive_to_avoid(self):
         """Infinite loop to scan and avoid obstacles"""
-        while True:
-            if is_clear:
-                #Fwd while dist> safe stop dist
-                self.cruise()
-            else:
-                #Picks the safest path and avoids obstacles based on the free space
-                self.safest_path()
+        while distance > self.SAFE_STOP_DIST:
+            self.cruise()
+        else:
+            #Picks the safest path and avoids obstacles based on the free space
+            self.smart_turn()
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
@@ -280,21 +278,72 @@ class Piggy(pigo.Pigo):
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         #Run obstacle count
-            #If return = 0
-            #Cruise
-        #if cruise stops
-            #Run safest path
-            #Restore heading/ (build function with safest path and heading/ incorporate)
+        for x in range(10):
+            self.safe_turn()
+            print ("\n----Finding A Clear Path----\n")
+            self.smart_turn()
+            #drive method to drive enough so that it clears the obstacle
+            self.driving()
+            print ("\n----Driving ")
+            self.restore_heading()
+            print ("\n----Restoring Heading----\n")
+            self.cruise()
+            #restore heading
+        time.sleep(.2)
 
-        #Else:
-            #Run safest path
+    def smart_turn(self):
+        """Find angle with greatest distance"""
+        ang = 0
+        largest_dist = 0
+        self.wide_scan(count = 4)
+        for index, distance in enumerate(self.scan):
+            if distance > largest_dist:
+                largest_dist = distance
+                ang = index
+        print("The best angle is %d\n" % ang)
+        turn = 7 * abs(ang - self.MIDPOINT) / 90   ##calculate how much it should turn to the valid direction.
+        if ang <= self.MIDPOINT:
+            self. encR(turn)
+        if ang > self.MIDPOINT:
+            self.encL(turn)
+            #Turns to calculated best angle measure
 
-        while True:
-            #Turns on navigation method
-            if self.is_clear():
-                self.cruise()
+    def safe_turn(self):
+        """rotate until path is clear"""
+        self.servo()
+        self.right_rot()
+        while self.dist() > self.SAFE_STOP_DIST:
+         self.stop()
+
+    def driving(self):
+        """Drives fwd while scanning"""
+        while self.fwd:
+            self.mid_scan(count=4)
+            if distance > self.SAFE_STOP_DIST:
+                self.fwd()
             else:
-                self.full_count()
+                self.stop()
+
+    def mid_scan(self, count=2):
+        """moves servo 120 degrees and fills scan array, default count=2"""
+        self.flush_scan()
+        for x in range(self.MIDPOINT-20, self.MIDPOINT+20, count):
+            servo(x)
+            time.sleep(.1)
+            scan1 = us_dist(15)
+            time.sleep(.1)
+            #double check the distance
+            scan2 = us_dist(15)
+            #if I found a different distance the second time....
+            if abs(scan1 - scan2) > 2:
+                scan3 = us_dist(15)
+                time.sleep(.1)
+                #take another scan and average the three together
+                scan1 = (scan1+scan2+scan3)/3
+            self.scan[x] = scan1
+            print("Degree: "+str(x)+", distance: "+str(scan1))
+            time.sleep(.01)
+
 
     def safest_path(self):
         """find the safest way to travel; safest is the way with most space btwn obstacles"""\
@@ -348,7 +397,6 @@ class Piggy(pigo.Pigo):
         self.cruise()
         print("\n----Cruising----\n")
 #Moving in an infinite circle-- fix this
-
 
 ###################################################
 ############### STATIC FUNCTIONS
