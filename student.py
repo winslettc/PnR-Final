@@ -310,9 +310,10 @@ class Piggy(pigo.Pigo):
 
     def safe_turn(self):
         """rotate until path is clear"""
-        self.servo()
         self.right_rot()
-        while self.dist() > self.SAFE_STOP_DIST:
+        while right_rot():
+            self.servo(self.MIDPOINT)
+        if self.dist() > self.SAFE_STOP_DIST:
          self.stop()
 
     def driving(self):
