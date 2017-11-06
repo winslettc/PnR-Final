@@ -313,8 +313,8 @@ class Piggy(pigo.Pigo):
         self.right_rot()
         while right_rot():
             self.servo(self.MIDPOINT)
-        if self.dist() > self.SAFE_STOP_DIST:
-         self.stop()
+            if self.dist() > self.SAFE_STOP_DIST:
+                self.stop()
 
     def driving(self):
         """Drives fwd while scanning"""
