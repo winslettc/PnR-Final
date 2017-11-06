@@ -279,11 +279,11 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         #Run obstacle count
         for x in range(10):
-            self.safe_turn()
+            #self.safe_turn()
             print ("\n----Finding A Clear Path----\n")
             self.smart_turn()
             #drive method to drive enough so that it clears the obstacle
-            self.driving()
+            self.cruise()
             print ("\n----Driving ")
             self.restore_heading()
             print ("\n----Restoring Heading----\n")
