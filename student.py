@@ -212,6 +212,9 @@ class Piggy(pigo.Pigo):
             else:
                 self.safe_turn()
                 print("\n----STOPPING----\n")
+        else:
+            print("\n----Not Clear----\n")
+            self.safe_turn()
 
     def drive_to_avoid(self):
         """Infinite loop to scan and avoid obstacles"""
