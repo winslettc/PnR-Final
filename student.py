@@ -210,11 +210,10 @@ class Piggy(pigo.Pigo):
 
     def drive_to_avoid(self):
         """Infinite loop to scan and avoid obstacles"""
-        while distance > self.SAFE_STOP_DIST:
+        while distance() > self.SAFE_STOP_DIST:
             self.cruise()
             print("\n----Cruising----\n")
         else:
-            #Picks the safest path and avoids obstacles based on the free space
             self.smart_turn()
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
@@ -284,7 +283,6 @@ class Piggy(pigo.Pigo):
             self.smart_turn()
             self.drive_to_avoid()
             self.restore_heading()
-        time.sleep(.2)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
@@ -296,13 +294,14 @@ class Piggy(pigo.Pigo):
             if distance > largest_dist:
                 largest_dist = distance
                 ang = index
-        print("The best angle is %d\n" % ang)
+        print("\n----The best angle is %d----\n" % ang)
         turn = 7 * abs(ang - self.MIDPOINT) / 90   ##calculate how much it should turn to the valid direction.
+        print("\n----Turning to the best angle----\n")
         if ang <= self.MIDPOINT:
             self. encR(turn)
         if ang > self.MIDPOINT:
             self.encL(turn)
-        print("\n----Turning to the best angle----\n")
+
 
             #Turns to calculated best angle measure
 
