@@ -202,13 +202,18 @@ class Piggy(pigo.Pigo):
         """Drives robot forward while the coast is clear"""
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
-        while self.dist() > self.SAFE_STOP_DIST:
-            self.encF(20)
-            print("\n----DRIVING----\n")
-            if self.dist() < self.SAFE_STOP_DIST:
-                time.sleep(.4)
-                self.stop()
-                print("\n----STOPPING----\n")
+        self.encF(20)
+        print("\n----DRIVING----\n")
+        self.mid_scan()
+        print("\n----Scanning----\n")
+        if self.dist() > self.SAFE_STOP_DIST:
+            self.cruise()
+        else:
+            time.sleep(.4)
+            self.stop()
+            print("\n----STOPPING----\n")
+
+
 
     def drive_to_avoid(self):
         """Infinite loop to scan and avoid obstacles"""
@@ -298,13 +303,10 @@ class Piggy(pigo.Pigo):
         print("\n----Turning to the best angle----\n")
         if ang <= self.MIDPOINT:
             self. encR(turn)
-            while dist() > self.SAFE_STOP_DIST:
-                self.cruise()
+            self.cruise()
         if ang > self.MIDPOINT:
             self.encL(turn)
-            while dist() > self.SAFE_STOP_DIST:
-                self.cruise()
-            #Turns to calculated best angle measure
+            self.cruise()
 
     def safe_turn(self):
         """rotate until path is clear"""
