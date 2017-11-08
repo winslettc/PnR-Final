@@ -281,7 +281,7 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         for x in range(10):
             self.smart_turn()
-            self.drive_to_avoid()
+            self.cruise()
             self.restore_heading()
 
     def smart_turn(self):
