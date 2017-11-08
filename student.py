@@ -298,10 +298,12 @@ class Piggy(pigo.Pigo):
         print("\n----Turning to the best angle----\n")
         if ang <= self.MIDPOINT:
             self. encR(turn)
-            self.cruise()
+            while dist() > self.SAFE_STOP_DIST:
+                self.cruise()
         if ang > self.MIDPOINT:
             self.encL(turn)
-            self.cruise()
+            while dist() > self.SAFE_STOP_DIST:
+                self.cruise()
             #Turns to calculated best angle measure
 
     def safe_turn(self):
