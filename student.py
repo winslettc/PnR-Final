@@ -200,6 +200,7 @@ class Piggy(pigo.Pigo):
 
     def cruise(self):
         """Drives robot forward while the coast is clear"""
+        self.servo(self.MIDPOINT)
         self.fwd()
         print("\n----DRIVING----\n")
         while self.dist() > self.SAFE_STOP_DIST:
@@ -211,6 +212,7 @@ class Piggy(pigo.Pigo):
         """Infinite loop to scan and avoid obstacles"""
         while distance > self.SAFE_STOP_DIST:
             self.cruise()
+            print("\n----Cruising----\n")
         else:
             #Picks the safest path and avoids obstacles based on the free space
             self.smart_turn()
@@ -254,7 +256,8 @@ class Piggy(pigo.Pigo):
         elif self.turn_track < 0:
             self.encR(abs(self.turn_track))
             #Turn right to ab value of turn track
-        print("Turn track is currently: %d" % self.turn_track)
+        print("\n----Turn track is currently: %d----\n" % self.turn_track)
+        print("\n----Restoring Heading----")
 
     def test_restore(self):
         """Tests restore heading method to determine usability"""
@@ -277,25 +280,18 @@ class Piggy(pigo.Pigo):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-        #Run obstacle count
         for x in range(10):
-            #self.safe_turn()
-            print ("\n----Finding A Clear Path----\n")
             self.smart_turn()
-            #drive method to drive enough so that it clears the obstacle
-            self.cruise()
-            print ("\n----Driving ")
+            self.drive_to_avoid()
             self.restore_heading()
-            print ("\n----Restoring Heading----\n")
-            self.cruise()
-            #restore heading
         time.sleep(.2)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
         ang = 0
         largest_dist = 0
-        self.wide_scan(count = 4)
+        print("\n----Scanning the Area----\n")
+        self.wide_scan(count = 5)
         for index, distance in enumerate(self.scan):
             if distance > largest_dist:
                 largest_dist = distance
@@ -306,6 +302,8 @@ class Piggy(pigo.Pigo):
             self. encR(turn)
         if ang > self.MIDPOINT:
             self.encL(turn)
+        print("\n----Turning to the best angle----\n")
+
             #Turns to calculated best angle measure
 
     def safe_turn(self):
