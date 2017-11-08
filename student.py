@@ -286,8 +286,20 @@ class Piggy(pigo.Pigo):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-        for x in range(10):
+        while True:
             self.smart_turn()
+            if self.is_clear():
+                print("Ready to go!")
+                self.fwd()
+                time.sleep(1)
+                if self.dist() > self.SAFE_STOP_DIST:  ###To make the movement continues more by a simple safe check
+                    return self.is_clear()
+                else:
+                    return False
+            else:
+                print("\n----Back up, Not enough free space----\n")
+                self.encB(5)  # turn back
+                self.restore_head()
 
     def smart_turn(self):
         """Find angle with greatest distance"""
@@ -304,10 +316,8 @@ class Piggy(pigo.Pigo):
         print("\n----Turning to the best angle----\n")
         if ang <= self.MIDPOINT:
             self. encR(turn)
-            self.cruise()
         if ang > self.MIDPOINT:
             self.encL(turn)
-            self.cruise()
 
     def safe_turn(self):
         """rotate until path is clear"""
