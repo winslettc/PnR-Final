@@ -290,9 +290,9 @@ class Piggy(pigo.Pigo):
             while True:
                 self.smart_turn()
                 if self.is_clear():
-                    print("Ready to go!")
+                    print("\n----Ready to go!----\n")
                     self.fwd()
-                    time.sleep(1)
+                    time.sleep(.5)
                     if self.dist() > self.SAFE_STOP_DIST:  ###To make the movement continues more by a simple safe check
                         return self.is_clear()
                     else:
