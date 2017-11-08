@@ -206,6 +206,7 @@ class Piggy(pigo.Pigo):
             self.fwd()
             print("\n----DRIVING----\n")
             if self.dist() < self.SAFE_STOP_DIST:
+                time.sleep(.4)
                 self.stop()
                 print("\n----STOPPING----\n")
 
@@ -301,8 +302,6 @@ class Piggy(pigo.Pigo):
             self. encR(turn)
         if ang > self.MIDPOINT:
             self.encL(turn)
-
-
             #Turns to calculated best angle measure
 
     def safe_turn(self):
