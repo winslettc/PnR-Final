@@ -204,16 +204,13 @@ class Piggy(pigo.Pigo):
         print("\n----Aligning servo to Midpoint----\n")
         self.encF(20)
         print("\n----DRIVING----\n")
-        self.mid_scan()
+        self.semi_scan(count=4)
         print("\n----Scanning----\n")
         if self.dist() > self.SAFE_STOP_DIST:
             self.cruise()
         else:
-            time.sleep(.4)
-            self.stop()
+            self.safe_turn()
             print("\n----STOPPING----\n")
-
-
 
     def drive_to_avoid(self):
         """Infinite loop to scan and avoid obstacles"""
@@ -346,6 +343,27 @@ class Piggy(pigo.Pigo):
             self.scan[x] = scan1
             print("Degree: "+str(x)+", distance: "+str(scan1))
             time.sleep(.01)
+
+    def semi_scan(self, count=2):
+        """moves servo 120 degrees and fills scan array, default count=2"""
+        self.flush_scan()
+        for x in range(self.MIDPOINT-40, self.MIDPOINT+40, count):
+            servo(x)
+            time.sleep(.1)
+            scan1 = us_dist(15)
+            time.sleep(.1)
+            #double check the distance
+            scan2 = us_dist(15)
+            #if I found a different distance the second time....
+            if abs(scan1 - scan2) > 2:
+                scan3 = us_dist(15)
+                time.sleep(.1)
+                #take another scan and average the three together
+                scan1 = (scan1+scan2+scan3)/3
+            self.scan[x] = scan1
+            print("Degree: "+str(x)+", distance: "+str(scan1))
+            time.sleep(.01)
+
 
 
     def safest_path(self):
