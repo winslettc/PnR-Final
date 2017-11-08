@@ -202,15 +202,16 @@ class Piggy(pigo.Pigo):
         """Drives robot forward while the coast is clear"""
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
-        self.encF(20)
-        print("\n----DRIVING----\n")
-        self.semi_scan(count=4)
-        print("\n----Scanning----\n")
-        if self.dist() > self.SAFE_STOP_DIST:
-            self.cruise()
-        else:
-            self.safe_turn()
-            print("\n----STOPPING----\n")
+        if is_clear():
+            self.encF(20)
+            print("\n----DRIVING----\n")
+            self.semi_scan(count=4)
+            print("\n----Scanning----\n")
+            if self.dist() > self.SAFE_STOP_DIST:
+                self.cruise()
+            else:
+                self.safe_turn()
+                print("\n----STOPPING----\n")
 
     def drive_to_avoid(self):
         """Infinite loop to scan and avoid obstacles"""
