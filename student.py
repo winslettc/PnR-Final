@@ -283,7 +283,6 @@ class Piggy(pigo.Pigo):
         for x in range(10):
             self.smart_turn()
             self.cruise()
-            self.restore_heading()
 
     def smart_turn(self):
         """Find angle with greatest distance"""
