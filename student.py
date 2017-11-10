@@ -278,7 +278,7 @@ class Piggy(pigo.Pigo):
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         right_now = datetime.datetime.utcnow()
-        difference = (right_now - self.start_time)
+        difference = (right_now - self.start_time).seconds
         print("\n----It took you %d seconds to run this----\n" % difference )
         while True:
             self.is_clear()
