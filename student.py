@@ -282,7 +282,6 @@ class Piggy(pigo.Pigo):
         difference = (right_now - self.start_time).seconds
         print("\n----It took you %d seconds to run this----\n" % difference )
         while True:
-            self.wide_scan(count = 6)
             self.smart_turn()
             if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----Ready to go!----\n")
@@ -301,6 +300,7 @@ class Piggy(pigo.Pigo):
         ang = 0
         largest_dist = 0
         print("\n----Scanning the Area----\n")
+        self.servo(self.MIDPOINT)
         self.wide_scan(count = 5)
         for index, distance in enumerate(self.scan):
             if distance > largest_dist:
@@ -308,7 +308,7 @@ class Piggy(pigo.Pigo):
                 ang = index
         print("\n----The best angle is %d----\n" % ang)
         turn = 7 * abs(ang - self.MIDPOINT) / 90   ##calculate how much it should turn to the valid direction.
-        print("\n----Turning to the best angle----\n")
+        print("\n----Turning to the best angle----\n" % ang)
         if ang <= self.MIDPOINT:
             self. encR(turn)
         if ang > self.MIDPOINT:
@@ -319,6 +319,7 @@ class Piggy(pigo.Pigo):
         self.right_rot()
         start = datetime.datetime.utcnow()
         self.servo(self.MIDPOINT)
+        print("\n----Servo is set to the midpoint----\n")
         self.set_speed(80,80)
         while True:
             if self.dist() > 100:
