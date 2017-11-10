@@ -287,7 +287,6 @@ class Piggy(pigo.Pigo):
                 print("\n----Ready to go!----\n")
                 self.cruise()
                 time.sleep(.5)
-                  ###To make the movement continues more by a simple safe check
             elif self.dist() < self.SAFE_STOP_DIST:
                 print("\n----Back up, Not enough free space----\n")
                 self.encB(5)
