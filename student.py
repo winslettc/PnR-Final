@@ -308,7 +308,7 @@ class Piggy(pigo.Pigo):
                 ang = index
         print("\n----The best angle is %d----\n" % ang)
         turn = 7 * abs(ang - self.MIDPOINT) / 90   ##calculate how much it should turn to the valid direction.
-        print("\n----Turning to the best angle----\n" % ang)
+        print("\n----Turning to the best angle----\n")
         if ang <= self.MIDPOINT:
             self. encR(turn)
         if ang > self.MIDPOINT:
