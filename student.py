@@ -211,6 +211,7 @@ class Piggy(pigo.Pigo):
                 while self.fwd():
                     self.mid_scan(count=4)
                     print("\n----Scanning----\n")
+                    time.sleep(.2)
                 if self.dist() < self.SAFE_STOP_DIST:
                     self.stop()
 
@@ -281,7 +282,8 @@ class Piggy(pigo.Pigo):
         difference = (right_now - self.start_time).seconds
         print("\n----It took you %d seconds to run this----\n" % difference )
         while True:
-            self.is_clear()
+            self.wide_scan(count = 6)
+            self.smart_turn()
             if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----Ready to go!----\n")
                 self.cruise()
@@ -290,7 +292,7 @@ class Piggy(pigo.Pigo):
             elif self.dist() < self.SAFE_STOP_DIST:
                 print("\n----Back up, Not enough free space----\n")
                 self.encB(5)
-                self.smooth_turn()
+                self.smart_turn()
                 self.cruise()
                 self.restore_heading()
 
