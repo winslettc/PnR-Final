@@ -2,6 +2,7 @@ import pigo
 import time  # import just in case students need
 import random
 from gopigo import *
+import datetime
 
 # setup logs
 import logging
@@ -17,6 +18,7 @@ class Piggy(pigo.Pigo):
     def __init__(self):
         """The robot's constructor: sets variables and runs menu loop"""
         print("I have been instantiated!")
+        self.start_time = datetime.datetime.utcnow()
         # Our servo turns the sensor. What angle of the servo( ) method sets it straight?
         self.MIDPOINT = 84
         # YOU DECIDE: How close can an object get (cm) before we have to stop?
@@ -199,29 +201,18 @@ class Piggy(pigo.Pigo):
         #Scan again
 
     def cruise(self):
-        """Drives robot forward while the coast is clear"""
+        """Drives robot forward while the coast is clear and scans continuously"""
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
-        while self.dist() > self.SAFE_STOP_DIST:
-            self.encF(20)
-            print("\n----DRIVING----\n")
-            self.semi_scan(count=4)
-            print("\n----Scanning----\n")
+        while True:
             if self.dist() > self.SAFE_STOP_DIST:
-                self.cruise()
-            else:
-                self.smart_turn()
-                print("\n----STOPPING----\n")
-        else:
-            print("\n----Not Clear----\n")
-            self.smart_turn()
-
-    def drive_to_avoid(self):
-        """Infinite loop to scan and avoid obstacles"""
-        while distance() > self.SAFE_STOP_DIST:
-            self.cruise()
-        else:
-            self.smart_turn()
+                self.fwd()
+                print("\n----DRIVING----\n")
+                while self.fwd():
+                    self.mid_scan(count=4)
+                    print("\n----Scanning----\n")
+                if self.dist() < self.SAFE_STOP_DIST:
+                    self.stop()
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
@@ -286,21 +277,22 @@ class Piggy(pigo.Pigo):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-        for x in range(10):
-            while True:
-                self.smart_turn()
-                if self.is_clear():
-                    print("\n----Ready to go!----\n")
-                    self.fwd()
-                    time.sleep(.5)
-                    if self.dist() > self.SAFE_STOP_DIST:  ###To make the movement continues more by a simple safe check
-                        return self.is_clear()
-                    else:
-                        return False
-                else:
-                    print("\n----Back up, Not enough free space----\n")
-                    self.encB(5)  # turn back
-                    self.restore_head()
+        right_now = datetime.datetime.utcnow()
+        difference = (right_now - self.start_time)
+        print("\n----It took you %d seconds to run this----\n" % difference )
+        while True:
+            self.is_clear()
+            if self.dist() > self.SAFE_STOP_DIST:
+                print("\n----Ready to go!----\n")
+                self.cruise()
+                time.sleep(.5)
+                  ###To make the movement continues more by a simple safe check
+            elif self.dist() < self.SAFE_STOP_DIST:
+                print("\n----Back up, Not enough free space----\n")
+                self.encB(5)
+                self.smooth_turn()
+                self.cruise()
+                self.restore_heading()
 
     def smart_turn(self):
         """Find angle with greatest distance"""
@@ -320,24 +312,20 @@ class Piggy(pigo.Pigo):
         if ang > self.MIDPOINT:
             self.encL(turn)
 
-    def safe_turn(self):
-        """rotate until path is clear"""
+    def smooth_turn(self):
+        """Rotates to find free space and records time to limit spins by robot"""
         self.right_rot()
+        start = datetime.datetime.utcnow()
+        self.servo(self.MIDPOINT)
         self.set_speed(80,80)
-        while right_rot():
-            self.servo(self.MIDPOINT)
-            if self.dist() > self.SAFE_STOP_DIST:
-                print("\n----Found a Clear Stopping Distance----\n")
-                time.sleep(.2)
+        while True:
+            if self.dist() > 100:
                 self.stop()
-
-    def driving(self):
-        """Drives fwd while scanning"""
-        self.fwd()
-        while self.fwd:
-            self.mid_scan(count=4)
-            if distance() < self.SAFE_STOP_DIST:
+                print("\n----I think I have found a safe place to go!----\n")
+            elif datetime.datetime.utcnow() - start > datetime.timedelta(seconds = 10):
                 self.stop()
+                print("\n----I give up, it has been too long----\n")
+            time.sleep(.2)
 
     def mid_scan(self, count=2):
         """moves servo 120 degrees and fills scan array, default count=2"""
@@ -378,8 +366,6 @@ class Piggy(pigo.Pigo):
             self.scan[x] = scan1
             print("Degree: "+str(x)+", distance: "+str(scan1))
             time.sleep(.01)
-
-
 
     def safest_path(self):
         """find the safest way to travel; safest is the way with most space btwn obstacles"""\
