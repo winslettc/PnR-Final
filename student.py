@@ -288,7 +288,8 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
         while True:
-            self.alt_alt_meth()
+            for x in range(20):
+                self.alt_alt_meth()
         #if dist() > self.SAFE_STOP_DIST:
          #   self.cruise()
           #  if dist() < self.SAFE_STOP_DIST:
