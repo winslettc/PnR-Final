@@ -206,17 +206,15 @@ class Piggy(pigo.Pigo):
         print("\n----Aligning servo to Midpoint----\n")
         self.set_speed(80, 80)
         print("\n----Setting speed----\n")
-        while True:
-            if self.dist() > self.SAFE_STOP_DIST:
-                print("\n----DRIVING, ready to go!----\n")
-                self.encF(40)
-                if dist() > self.SAFE_STOP_DIST:
-                    print("\n----Still ready to drive----\n")
-                    self.encF(20)
-                    time.sleep(.2)
-                else:
-                    self.stop()
-                    print("\n----STOPPING----\n")
+        if self.dist() > self.SAFE_STOP_DIST:
+            print("\n----DRIVING, ready to go!----\n")
+            self.encF(40)
+            if dist() > self.SAFE_STOP_DIST:
+                print("\n----Still ready to drive----\n")
+                self.encF(20)
+            else:
+                self.stop()
+                print("\n----STOPPING----\n")
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
         """360 degree view of obstacles around"""
@@ -287,9 +285,8 @@ class Piggy(pigo.Pigo):
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
-        while True:
-            for x in range(20):
-                self.alt_alt_meth()
+        for x in range(20):
+            self.alt_alt_meth()
         #if dist() > self.SAFE_STOP_DIST:
          #   self.cruise()
           #  if dist() < self.SAFE_STOP_DIST:
@@ -314,6 +311,7 @@ class Piggy(pigo.Pigo):
         """Subfunction of nav method- runs cruise, smart turn, and alt method #1"""
         self.smart_turn()
         self.cruise()
+        self.smart_turn()
         if self.dist() < self.SAFE_STOP_DIST:
             self.alternate_method()
             time.sleep(.2)
