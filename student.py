@@ -290,6 +290,7 @@ class Piggy(pigo.Pigo):
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
+        self.quick_scan()
         if dist() > self.SAFE_STOP_DIST:
             self.cruise()
             if dist() < self.SAFE_STOP_DIST:
