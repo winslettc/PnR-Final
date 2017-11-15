@@ -22,7 +22,7 @@ class Piggy(pigo.Pigo):
         # Our servo turns the sensor. What angle of the servo( ) method sets it straight?
         self.MIDPOINT = 84
         # YOU DECIDE: How close can an object get (cm) before we have to stop?
-        self.SAFE_STOP_DIST = 30
+        self.SAFE_STOP_DIST = 40
         # YOU DECIDE: How close can an object get (cm) before we have to stop? immediately
         self.HARD_STOP_DIST = 15
         # YOU DECIDE: What left motor power helps straighten your fwd()?
@@ -204,19 +204,21 @@ class Piggy(pigo.Pigo):
         """Drives robot forward while the coast is clear and scans continuously"""
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
+        self.set_speed(80, 80)
+        print("\n----Setting speed----\n")
         while True:
-            self.set_speed(80,80)
-            print("\n----Setting speed----\n")
             if self.dist() > self.SAFE_STOP_DIST:
-                self.fwd()
                 print("\n----DRIVING, ready to go!----\n")
-                while self.fwd():
-                    self.mid_scan(count=4)
-                    print("\n----Scanning while driving----\n")
-                    if dist() < self.SAFE_STOP_DIST:
-                        self.stop()
-                        print("\n----STOPPING----\n")
-                        time.sleep(.2)
+                self.encF(20)
+                self.quick_scan()
+                print("\n----Quickly Scanning----\n")
+                if dist() < self.SAFE_STOP_DIST:
+                    self.stop()
+                    print("\n----STOPPING----\n")
+                    time.sleep(.2)
+                elif dist() > self.SAFE_STOP_DIST:
+                    print("\n----Still ready to drive----\n")
+                    self.encF(20)
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
@@ -260,6 +262,12 @@ class Piggy(pigo.Pigo):
         print("\n----Turn track is currently: %d----\n" % self.turn_track)
         print("\n----Restoring Heading----\n")
 
+    def datetime(self):
+        """Datetime function, how long it takes to run a function"""
+        right_now = datetime.datetime.utcnow()
+        difference = (right_now - self.start_time).seconds
+        print("\n----It took you %d seconds to run this----\n" % difference)
+
     def test_restore(self):
         """Tests restore heading method to determine usability"""
         print("Turn track is currently: %d" % self.turn_track)
@@ -281,15 +289,15 @@ class Piggy(pigo.Pigo):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-        right_now = datetime.datetime.utcnow()
-        difference = (right_now - self.start_time).seconds
-        print("\n----It took you %d seconds to run this----\n" % difference )
-        while True:
-            self.smart_turn()
+        self.datetime()
+        if dist() > self.SAFE_STOP_DIST:
             self.cruise()
-            if self.dist() < self.SAFE_STOP_DIST:
-                self.alternate_method()
-                time.sleep(.2)
+            if dist() < self.SAFE_STOP_DIST:
+                while True:
+                    self.alt_alt_meth()
+        else:
+            while True:
+                self.alt_alt_meth()
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
@@ -302,6 +310,13 @@ class Piggy(pigo.Pigo):
         self.cruise()
         self.restore_heading()
 
+    def alt_alt_meth(self):
+        """Subfunction of nav method- runs cruise, smart turn, and alt method #1"""
+        self.smart_turn()
+        self.cruise()
+        if self.dist() < self.SAFE_STOP_DIST:
+            self.alternate_method()
+            time.sleep(.2)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
@@ -377,6 +392,26 @@ class Piggy(pigo.Pigo):
             self.scan[x] = scan1
             print("Degree: "+str(x)+", distance: "+str(scan1))
             time.sleep(.01)
+
+    def quick_scan(self, count=2):
+        """moves servo 120 degrees and fills scan array, default count=2"""
+        self.flush_scan()
+        for x in range(self.MIDPOINT-5, self.MIDPOINT+5, count):
+            servo(x)
+            time.sleep(.1)
+            scan1 = us_dist(15)
+            time.sleep(.1)
+            #double check the distance
+            scan2 = us_dist(15)
+            #if I found a different distance the second time....
+            if abs(scan1 - scan2) > 2:
+                scan3 = us_dist(15)
+                time.sleep(.1)
+                #take another scan and average the three together
+                scan1 = (scan1+scan2+scan3)/3
+            self.scan[x] = scan1
+            time.sleep(.01)
+
 
     def safest_path(self):
         """find the safest way to travel; safest is the way with most space btwn obstacles"""\
