@@ -210,8 +210,6 @@ class Piggy(pigo.Pigo):
             if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----DRIVING, ready to go!----\n")
                 self.encF(40)
-                self.quick_scan()
-                print("\n----Quickly Scanning----\n")
                 if dist() > self.SAFE_STOP_DIST:
                     print("\n----Still ready to drive----\n")
                     self.encF(20)
