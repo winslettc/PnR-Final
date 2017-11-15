@@ -206,17 +206,17 @@ class Piggy(pigo.Pigo):
         print("\n----Aligning servo to Midpoint----\n")
         while True:
             self.set_speed(80,80)
-            self.servo(self.MIDPOINT)
+            print("\n----Setting speed----\n")
             if self.dist() > self.SAFE_STOP_DIST:
                 self.fwd()
-                print("\n----DRIVING----\n")
+                print("\n----DRIVING, ready to go!----\n")
                 while self.fwd():
                     self.mid_scan(count=4)
                     print("\n----Scanning while driving----\n")
-                    time.sleep(.2)
-                if self.dist() < self.SAFE_STOP_DIST:
-                    print("\n----There is no free space ahead, Stopping----\n")
-                    self.stop()
+                    if dist() < self.SAFE_STOP_DIST:
+                        self.stop()
+                        print("\n----STOPPING----\n")
+                        time.sleep(.2)
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
@@ -258,7 +258,7 @@ class Piggy(pigo.Pigo):
             self.encR(abs(self.turn_track))
             #Turn right to ab value of turn track
         print("\n----Turn track is currently: %d----\n" % self.turn_track)
-        print("\n----Restoring Heading----")
+        print("\n----Restoring Heading----\n")
 
     def test_restore(self):
         """Tests restore heading method to determine usability"""
@@ -286,23 +286,22 @@ class Piggy(pigo.Pigo):
         print("\n----It took you %d seconds to run this----\n" % difference )
         while True:
             self.smart_turn()
-            if self.dist() > self.SAFE_STOP_DIST:
-                print("\n----Ready to go!----\n")
-                self.cruise()
-                time.sleep(.5)
-                if self.dist() < self.SAFE_STOP_DIST:
-                    self.alternate_method()
-            elif self.dist() < self.SAFE_STOP_DIST:
+            self.cruise()
+            if self.dist() < self.SAFE_STOP_DIST:
                 self.alternate_method()
+                time.sleep(.2)
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
         print("\n----Back up, Not enough free space----\n")
         self.servo(self.MIDPOINT)
+        print("\n----Setting servo----\n")
         self.encB(5)
+        print("\n----Backing up----\n")
         self.smart_turn()
         self.cruise()
         self.restore_heading()
+
 
     def smart_turn(self):
         """Find angle with greatest distance"""
