@@ -205,14 +205,17 @@ class Piggy(pigo.Pigo):
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
         while True:
+            self.set_speed(80,80)
+            self.servo(self.MIDPOINT)
             if self.dist() > self.SAFE_STOP_DIST:
                 self.fwd()
                 print("\n----DRIVING----\n")
                 while self.fwd():
                     self.mid_scan(count=4)
-                    print("\n----Scanning----\n")
+                    print("\n----Scanning while driving----\n")
                     time.sleep(.2)
                 if self.dist() < self.SAFE_STOP_DIST:
+                    print("\n----There is no free space ahead, Stopping----\n")
                     self.stop()
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
@@ -287,12 +290,19 @@ class Piggy(pigo.Pigo):
                 print("\n----Ready to go!----\n")
                 self.cruise()
                 time.sleep(.5)
+                if self.dist() < self.SAFE_STOP_DIST:
+                    self.alternate_method()
             elif self.dist() < self.SAFE_STOP_DIST:
-                print("\n----Back up, Not enough free space----\n")
-                self.encB(5)
-                self.smart_turn()
-                self.cruise()
-                self.restore_heading()
+                self.alternate_method()
+
+    def alternate_method(self):
+        """Backs up robot when there is no free space and chooses an alternate route with free space"""
+        print("\n----Back up, Not enough free space----\n")
+        self.servo(self.MIDPOINT)
+        self.encB(5)
+        self.smart_turn()
+        self.cruise()
+        self.restore_heading()
 
     def smart_turn(self):
         """Find angle with greatest distance"""
