@@ -209,17 +209,16 @@ class Piggy(pigo.Pigo):
         while True:
             if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----DRIVING, ready to go!----\n")
-                self.encF(20)
+                self.encF(40)
                 self.quick_scan()
                 print("\n----Quickly Scanning----\n")
-                if dist() < self.SAFE_STOP_DIST:
-                    self.stop()
-                    print("\n----STOPPING----\n")
-                    time.sleep(.2)
-                elif dist() > self.SAFE_STOP_DIST:
+                if dist() > self.SAFE_STOP_DIST:
                     print("\n----Still ready to drive----\n")
                     self.encF(20)
-
+                    time.sleep(.2)
+                else:
+                    self.stop()
+                    print("\n----STOPPING----\n")
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
         """360 degree view of obstacles around"""
