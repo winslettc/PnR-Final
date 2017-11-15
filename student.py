@@ -45,11 +45,10 @@ class Piggy(pigo.Pigo):
         # You may change the menu if you'd like to add an experimental method
         menu = {"n": ("Navigate forward", self.nav),
                 "cs": ("Cupid Shuffle", self.cupid_shuffle),
-                "b": ("Break dance", self.break_dance),
-                "fc": ("Full Count", self.full_count),
-                "c": ("Calibrate", self.calibrate),
-                "s": ("Check status", self.status),
-                "a": ("Avoid Obstacles", self.safest_path),
+                #"b": ("Break dance", self.break_dance),
+                #"fc": ("Full Count", self.full_count),
+                #"c": ("Calibrate", self.calibrate),
+                #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
                 "q": ("Quit", quit_now)
                 }
@@ -285,15 +284,14 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
         while True:
-            self.alt_alt_meth()
-        #if dist() > self.SAFE_STOP_DIST:
-         #   self.cruise()
-          #  if dist() < self.SAFE_STOP_DIST:
-           #     while True:
-            #        self.alt_alt_meth()
-        #else:
-         #   while True:
-          #      self.alt_alt_meth()
+            for x in range (10):
+                self.smart_turn()
+                self.cruise()
+                self.restore_heading()
+                self.smart_turn()
+                if self.dist() < self.SAFE_STOP_DIST:
+                    self.alternate_method()
+                    time.sleep(.2)
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
@@ -305,15 +303,6 @@ class Piggy(pigo.Pigo):
         self.smart_turn()
         self.cruise()
         self.restore_heading()
-
-    def alt_alt_meth(self):
-        """Subfunction of nav method- runs cruise, smart turn, and alt method #1"""
-        self.smart_turn()
-        self.cruise()
-        self.smart_turn()
-        if self.dist() < self.SAFE_STOP_DIST:
-            self.alternate_method()
-            time.sleep(.2)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
