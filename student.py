@@ -290,15 +290,16 @@ class Piggy(pigo.Pigo):
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
-        self.quick_scan()
-        if dist() > self.SAFE_STOP_DIST:
-            self.cruise()
-            if dist() < self.SAFE_STOP_DIST:
-                while True:
-                    self.alt_alt_meth()
-        else:
-            while True:
-                self.alt_alt_meth()
+        while True:
+            self.alt_alt_meth()
+        #if dist() > self.SAFE_STOP_DIST:
+         #   self.cruise()
+          #  if dist() < self.SAFE_STOP_DIST:
+           #     while True:
+            #        self.alt_alt_meth()
+        #else:
+         #   while True:
+          #      self.alt_alt_meth()
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
