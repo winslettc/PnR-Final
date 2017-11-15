@@ -203,7 +203,7 @@ class Piggy(pigo.Pigo):
         """Drives robot forward while the coast is clear and scans continuously"""
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
-        self.set_speed(80, 90)
+        self.set_speed(80, 85)
         print("\n----Setting speed----\n")
         while self.dist() > self.SAFE_STOP_DIST:
             print("\n----DRIVING, ready to go!----\n")
@@ -284,14 +284,17 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
         while True:
-            for x in range (10):
-                self.smart_turn()
-                self.cruise()
+            self.smart_turn()
+            if self.is_clear():
+                print("\n----Ready to Go!----\n")
+                self.servo(self.MIDPOINT)
+                print("\n----Setting Midpoint----\n")
+                self.fwd()
+                print("\n----Driving Forward----\n")
                 self.restore_heading()
-                self.smart_turn()
-                if self.dist() < self.SAFE_STOP_DIST:
+                if self. dist() < self.SAFE_STOP_DIST:
+                    print("\n----Not clear----\n")
                     self.alternate_method()
-                    time.sleep(.2)
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
