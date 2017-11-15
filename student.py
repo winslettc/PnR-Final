@@ -206,15 +206,14 @@ class Piggy(pigo.Pigo):
         print("\n----Aligning servo to Midpoint----\n")
         self.set_speed(80, 80)
         print("\n----Setting speed----\n")
-        if self.dist() > self.SAFE_STOP_DIST:
+        while self.dist() > self.SAFE_STOP_DIST:
             print("\n----DRIVING, ready to go!----\n")
-            self.encF(40)
-            if dist() > self.SAFE_STOP_DIST:
-                print("\n----Still ready to drive----\n")
-                self.encF(20)
-            else:
+            self.fwd()
+            time.sleep(.4)
+            if dist() < self.SAFE_STOP_DIST:
                 self.stop()
                 print("\n----STOPPING----\n")
+
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
         """360 degree view of obstacles around"""
@@ -285,7 +284,7 @@ class Piggy(pigo.Pigo):
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
-        for x in range(20):
+        while True:
             self.alt_alt_meth()
         #if dist() > self.SAFE_STOP_DIST:
          #   self.cruise()
