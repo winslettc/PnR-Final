@@ -210,11 +210,6 @@ class Piggy(pigo.Pigo):
             print("\n----DRIVING, ready to go!----\n")
             self.fwd()
             time.sleep(.1)
-        else:
-            print("Here is not safe enough, and turn back")
-            self.encB(10)  # turn back
-            self.restore_head()  # turn to the original direction
-            #return False
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
