@@ -50,7 +50,6 @@ class Piggy(pigo.Pigo):
                 #"c": ("Calibrate", self.calibrate),
                 #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
-                "P": ("Pulse", self.pulse),
                 "c": ("Cruise", self.cruise),
                 "q": ("Quit", quit_now)
                 }
