@@ -291,7 +291,12 @@ class Piggy(pigo.Pigo):
             self.servo(self.MIDPOINT)
             print("\n----Setting Midpoint----\n")
             self.cruise()
-            self.restore_heading()
+            self.smart_turn()
+            self.servo(self.MIDPOINT)
+            self.cruise()
+            self.smart_turn()
+            self.servo(self.MIDPOINT)
+            self.cruise()
 
 
     def alternate_method(self):
