@@ -284,10 +284,10 @@ class Piggy(pigo.Pigo):
         self.servo(self.MIDPOINT)
         self.set_speed(100,100)
         self.dist()
-        if dist > 90:
+        if dist() > 90:
             self.fwd()
             self.sleep(1)
-        elif dist < 90:
+        elif dist() < 90:
             self.stop()
 
     def nav(self):
