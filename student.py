@@ -283,14 +283,12 @@ class Piggy(pigo.Pigo):
         """check for obstacles, drive fixed amount forward"""
         self.servo(self.MIDPOINT)
         self.set_speed(100,100)
-        self.straight_scan()
-        while True:
-            for dist in enumerate(self.scan):
-                if dist > 90:
-                    self.fwd()
-                    self.sleep(1)
-                elif dist < 90:
-                    self.stop()
+        self.dist()
+        if dist > 90:
+            self.fwd()
+            self.sleep(1)
+        elif dist < 90:
+            self.stop()
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
