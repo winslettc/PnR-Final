@@ -211,8 +211,10 @@ class Piggy(pigo.Pigo):
             self.fwd()
             time.sleep(.1)
         else:
-            self.stop()
-            print("\n----STOPPING----\n")
+            print("Here is not safe enough, and turn back")
+            self.encB(10)  # turn back
+            self.restore_head()  # turn to the original direction
+            return False
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
@@ -279,41 +281,22 @@ class Piggy(pigo.Pigo):
         #Run restore method
         print("\n---Restored to original heading----\n")
 
-    def diff_cruise(self): # drive straight while path is clear or it will continue the method
-        while self.dist() > self.SAFE_STOP_DIST:
-                self.fwd()
-                time.sleep(.1)
-        else:
-            print("Here is not safe enough, and turn back")
-            self.encB(10)  # turn back
-            self.restore_head()  # turn to the original direction
-            return False
-
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
-        self.datetime()
         while True:
+            self.datetime()
             self.smart_turn()
-            if self.is_clear():
-                print("\n----Ready to Go!----\n")
-                self.servo(self.MIDPOINT)
-                print("\n----Setting Midpoint----\n")
-                self.pulse()
-                print("\n----Driving Forward----\n")
-                self.restore_heading()
-            elif self. dist() < self.SAFE_STOP_DIST:
-                print("\n----Not clear----\n")
-                self.alternate_method()
+            self.servo(self.MIDPOINT)
+            print("\n----Setting Midpoint----\n")
+            self.cruise()
+            self.alternate_method()
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
-        print("\n----Back up, Not enough free space----\n")
         self.servo(self.MIDPOINT)
         print("\n----Setting servo----\n")
-        self.encB(5)
-        print("\n----Backing up----\n")
         self.smart_turn()
         self.cruise()
         self.restore_heading()
