@@ -204,7 +204,7 @@ class Piggy(pigo.Pigo):
         """Drives robot forward while the coast is clear and scans continuously"""
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
-        self.set_speed(80, 85)
+        self.set_speed(120, 120)
         print("\n----Setting speed----\n")
         while self.dist() > self.SAFE_STOP_DIST:
             print("\n----DRIVING, ready to go!----\n")
@@ -240,11 +240,11 @@ class Piggy(pigo.Pigo):
 
     def right_turn(self):
         """"90 degree right turn"""
-        self.encR(10)
+        self.encR(12)
 
     def left_turn(self):
         """"90 degree left turn"""
-        self.encL(10)
+        self.encL(12)
 
     def restore_heading(self):
         """returns robot to original heading/ straightens out to original orientation"""
@@ -287,29 +287,27 @@ class Piggy(pigo.Pigo):
         self.datetime()
         while True:
             if self.is_clear():
+                time.sleep(1)
                 self.smart_turn()
                 self.servo(self.MIDPOINT)
                 print("\n----Setting Midpoint----\n")
                 self.cruise()
+                time.sleep(.4)
             else:
                 print("\n----Something is blocking my path----\n")
                 self.right_turn()
                 self.encB(5)
                 if self.is_clear():
+                    time.sleep(1)
                     self.servo(self.MIDPOINT)
                     self.cruise()
+                    time.sleep(.4)
                 else:
                     self.left_turn()
                     if self.is_clear():
+                        time.sleep(1)
                         self.cruise()
-
-    def alternate_method(self):
-        """Backs up robot when there is no free space and chooses an alternate route with free space"""
-        self.servo(self.MIDPOINT)
-        print("\n----Setting servo----\n")
-        self.smart_turn()
-        self.cruise()
-        self.restore_heading()
+                        time.sleep(.4)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
