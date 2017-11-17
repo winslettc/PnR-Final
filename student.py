@@ -51,6 +51,7 @@ class Piggy(pigo.Pigo):
                 #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
                 "P": ("Pulse", self.pulse),
+                "c": ("Cruise", self.cruise),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -283,12 +284,14 @@ class Piggy(pigo.Pigo):
         """check for obstacles, drive fixed amount forward"""
         self.servo(self.MIDPOINT)
         self.set_speed(100,100)
-        measurement = self.dist()
-        if measurement > 90:
-            self.fwd()
-            self.sleep(1)
-        elif measurement < 90:
-            self.stop()
+        while True:
+            measurement = self.dist()
+            if measurement > 90:
+                self.fwd()
+                if measurement < 90:
+                    self.sleep(1)
+            elif measurement < 90:
+                self.stop()
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
