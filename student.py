@@ -240,11 +240,11 @@ class Piggy(pigo.Pigo):
 
     def right_turn(self):
         """"90 degree right turn"""
-        self.encR(7)
+        self.encR(10)
 
     def left_turn(self):
         """"90 degree left turn"""
-        self.encL(7)
+        self.encL(10)
 
     def restore_heading(self):
         """returns robot to original heading/ straightens out to original orientation"""
@@ -284,22 +284,24 @@ class Piggy(pigo.Pigo):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
         print("-----------! NAVIGATION ACTIVATED !------------\n")
+        self.datetime()
         while True:
-            self.datetime()
-            self.smart_turn()
-            self.servo(self.MIDPOINT)
-            print("\n----Setting Midpoint----\n")
-            self.cruise()
-            self.right_turn()
-            self.smart_turn()
-            self.servo(self.MIDPOINT)
-            self.cruise()
-            self.left_turn()
-            self.smart_turn()
-            self.servo(self.MIDPOINT)
-            self.cruise()
-            self.smooth_turn()
-
+            if self.is_clear():
+                self.smart_turn()
+                self.servo(self.MIDPOINT)
+                print("\n----Setting Midpoint----\n")
+                self.cruise()
+            else:
+                print("\n----Something is blocking my path----\n")
+                self.right_turn()
+                self.encB(5)
+                if self.is_clear():
+                    self.servo(self.MIDPOINT)
+                    self.cruise()
+                else:
+                    self.left_turn()
+                    if self.is_clear():
+                        self.cruise()
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
