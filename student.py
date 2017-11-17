@@ -283,7 +283,7 @@ class Piggy(pigo.Pigo):
         """check for obstacles, drive fixed amount forward"""
         self.servo(self.MIDPOINT)
         self.set_speed(100,100)
-        self.dist()
+        measurement = self.dist()
         if measurement > 90:
             self.fwd()
             self.sleep(1)
