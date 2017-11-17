@@ -287,11 +287,13 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         while True:
             self.datetime()
-            self.smart_turn()
-            self.servo(self.MIDPOINT)
-            print("\n----Setting Midpoint----\n")
-            self.cruise()
-            self.alternate_method()
+            for x in range(10):
+                self.smart_turn()
+                self.servo(self.MIDPOINT)
+                print("\n----Setting Midpoint----\n")
+                self.cruise()
+                self.restore_heading()
+                time.sleep(.5)
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
