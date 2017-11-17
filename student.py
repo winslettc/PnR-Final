@@ -51,7 +51,7 @@ class Piggy(pigo.Pigo):
                 #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
                 "P": ("Pulse", self.pulse),
-                "c": ("Cruise", self.diff_cruise),
+                "c": ("Cruise", self.cruise),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -279,16 +279,6 @@ class Piggy(pigo.Pigo):
         self.restore_heading()
         #Run restore method
         print("\n---Restored to original heading----\n")
-
-    def pulse(self):
-        """check for obstacles, drive fixed amount forward"""
-        self.servo(self.MIDPOINT)
-        self.set_speed(100,100)
-        measurement = self.dist()
-        self.fwd()
-        while measurement > 90:
-            if measurement < 90:
-                self.stop()
 
     def diff_cruise(self): # drive straight while path is clear or it will continue the method
         while self.dist() > self.SAFE_STOP_DIST:
