@@ -51,7 +51,7 @@ class Piggy(pigo.Pigo):
                 #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
                 "P": ("Pulse", self.pulse),
-                "c": ("Cruise", self.diff_cruise()),
+                "c": ("Cruise", self.diff_cruise),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
