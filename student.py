@@ -50,6 +50,7 @@ class Piggy(pigo.Pigo):
                 #"c": ("Calibrate", self.calibrate),
                 #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
+                "P": ("Pulse", self.pulse),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -209,9 +210,9 @@ class Piggy(pigo.Pigo):
             print("\n----DRIVING, ready to go!----\n")
             self.fwd()
             time.sleep(.1)
-            if dist() < self.SAFE_STOP_DIST:
-                self.stop()
-                print("\n----STOPPING----\n")
+        if dist() < self.SAFE_STOP_DIST:
+            self.stop()
+            print("\n----STOPPING----\n")
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
@@ -278,6 +279,19 @@ class Piggy(pigo.Pigo):
         #Run restore method
         print("\n---Restored to original heading----\n")
 
+    def pulse(self):
+        """check for obstacles, drive fixed amount forward"""
+        self.servo(self.MIDPOINT)
+        self.set_speed(100,100)
+        self.straight_scan()
+        while True:
+            for dist in enumerate(self.scan):
+                if dist > 90:
+                    self.fwd()
+                    self.sleep(1)
+                elif dist < 90:
+                    self.stop()
+
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
@@ -289,12 +303,12 @@ class Piggy(pigo.Pigo):
                 print("\n----Ready to Go!----\n")
                 self.servo(self.MIDPOINT)
                 print("\n----Setting Midpoint----\n")
-                self.fwd()
+                self.pulse()
                 print("\n----Driving Forward----\n")
                 self.restore_heading()
-                if self. dist() < self.SAFE_STOP_DIST:
-                    print("\n----Not clear----\n")
-                    self.alternate_method()
+            elif self. dist() < self.SAFE_STOP_DIST:
+                print("\n----Not clear----\n")
+                self.alternate_method()
 
     def alternate_method(self):
         """Backs up robot when there is no free space and chooses an alternate route with free space"""
@@ -401,6 +415,25 @@ class Piggy(pigo.Pigo):
             self.scan[x] = scan1
             time.sleep(.01)
 
+    def straight_scan(self):
+        """moves servo 120 degrees and fills scan array, default count=2"""
+        self.flush_scan()
+        for x in range(self.MIDPOINT, count):
+            servo(x)
+            time.sleep(.1)
+            scan1 = us_dist(15)
+            time.sleep(.1)
+            # double check the distance
+            scan2 = us_dist(15)
+            # if I found a different distance the second time....
+            if abs(scan1 - scan2) > 2:
+                scan3 = us_dist(15)
+                time.sleep(.1)
+                # take another scan and average the three together
+                scan1 = (scan1 + scan2 + scan3) / 3
+            self.scan[x] = scan1
+            print("Degree: " + str(x) + ", distance: " + str(scan1))
+            time.sleep(.01)
 
     def safest_path(self):
         """find the safest way to travel; safest is the way with most space btwn obstacles"""\
