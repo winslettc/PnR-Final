@@ -51,7 +51,7 @@ class Piggy(pigo.Pigo):
                 #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
                 "P": ("Pulse", self.pulse),
-                "c": ("Cruise", self.cruise),
+                "c": ("Cruise", self.diff_cruise()),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -211,7 +211,7 @@ class Piggy(pigo.Pigo):
             print("\n----DRIVING, ready to go!----\n")
             self.fwd()
             time.sleep(.1)
-        if dist() < self.SAFE_STOP_DIST:
+        else:
             self.stop()
             print("\n----STOPPING----\n")
 
@@ -288,9 +288,17 @@ class Piggy(pigo.Pigo):
         self.fwd()
         while measurement > 90:
             if measurement < 90:
-                    self.stop()
+                self.stop()
 
-
+    def diff_cruise(self): # drive straight while path is clear or it will continue the method
+        while self.dist() > self.SAFE_STOP_DIST:
+                self.fwd()
+                time.sleep(.1)
+        else:
+            print("Here is not safe enough, and turn back")
+            self.encB(10)  # turn back
+            self.restore_head()  # turn to the original direction
+            return False
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
