@@ -247,6 +247,10 @@ class Piggy(pigo.Pigo):
         """"90 degree right turn"""
         self.encR(7)
 
+    def left_turn(self):
+        """"90 degree left turn"""
+        self.encL(7)
+
     def restore_heading(self):
         """returns robot to original heading/ straightens out to original orientation"""
         if self.turn_track > 0:
@@ -291,12 +295,15 @@ class Piggy(pigo.Pigo):
             self.servo(self.MIDPOINT)
             print("\n----Setting Midpoint----\n")
             self.cruise()
+            self.right_turn()
             self.smart_turn()
             self.servo(self.MIDPOINT)
             self.cruise()
+            self.left_turn()
             self.smart_turn()
             self.servo(self.MIDPOINT)
             self.cruise()
+            self.smooth_turn()
 
 
     def alternate_method(self):
