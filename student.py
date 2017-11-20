@@ -306,12 +306,16 @@ class Piggy(pigo.Pigo):
             else:
                 print("\n----Something is blocking my path----\n")
                 self.back_turn_right()
+                if self.is_clear():
+                    self.smart_cruise()
                 self.smart_turn()
                 if self.is_clear():
                     self.smart_cruise()
                     time.sleep(.1)
                 else:
                     self.back_turn_left()
+                    if self.is_clear():
+                        self.smart_cruise()
                     self.smart_turn()
                     if self.is_clear():
                         self.smart_cruise()
