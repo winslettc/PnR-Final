@@ -52,6 +52,7 @@ class Piggy(pigo.Pigo):
                 "tr": ("Test Restore Method", self.test_restore),
                 "c": ("Cruise", self.cruise),
                 "sc": ("Smart Cruise", self.smart_cruise),
+                "b": ("Left BackUp ", self.back_turn_left()),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -281,6 +282,16 @@ class Piggy(pigo.Pigo):
         #Run restore method
         print("\n---Restored to original heading----\n")
 
+    def back_turn_left(self):
+        """Backs up and turns left simultaneously"""
+        self.set_speed(80, 200)
+        self.encB(10)
+
+    def back_turn_right(self):
+        """Backs up and turns right"""
+        self.set_speed(200,80)
+        self.encB(10)
+
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
         logging.debug("Starting the nav method")
@@ -288,27 +299,23 @@ class Piggy(pigo.Pigo):
         self.datetime()
         while True:
             if self.is_clear():
-                time.sleep(1)
+                self.smart_cruise()
                 self.smart_turn()
-                self.servo(self.MIDPOINT)
-                print("\n----Setting Midpoint----\n")
-                self.cruise()
-                time.sleep(.4)
+                self.smart_cruise()
+                time.sleep(.1)
             else:
                 print("\n----Something is blocking my path----\n")
                 self.right_turn()
                 self.encB(5)
                 if self.is_clear():
-                    time.sleep(1)
-                    self.servo(self.MIDPOINT)
-                    self.cruise()
-                    time.sleep(.4)
+                    self.smart_cruise()
+                    time.sleep(.1)
                 else:
                     self.left_turn()
                     if self.is_clear():
                         time.sleep(1)
-                        self.cruise()
-                        time.sleep(.4)
+                        self.smart_cruise()
+                        time.sleep(.1)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
@@ -350,6 +357,7 @@ class Piggy(pigo.Pigo):
         MAX_SPEED = 200
         MID_SPEED = 150
         LOW_SPEED = 100
+        self.servo(self.MIDPOINT)
         self.fwd()
         while True:
             dis = self.dist()
