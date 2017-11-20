@@ -286,13 +286,13 @@ class Piggy(pigo.Pigo):
         """Backs up and turns left simultaneously"""
         self.set_speed(60, 200)
         for x in range(2):
-            self.encB(10)
+            self.encB(9)
 
     def back_turn_right(self):
         """Backs up and turns right"""
         self.set_speed(200,60)
         for x in range(2):
-            self.encB(10)
+            self.encB(9)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
