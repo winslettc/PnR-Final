@@ -285,7 +285,7 @@ class Piggy(pigo.Pigo):
     def back_turn_left(self):
         """Backs up and turns left simultaneously"""
         self.set_speed(60, 200)
-        self.encB(13)
+        self.encB(16)
 
     def back_turn_right(self):
         """Backs up and turns right"""
