@@ -52,7 +52,7 @@ class Piggy(pigo.Pigo):
                 "tr": ("Test Restore Method", self.test_restore),
                 "c": ("Cruise", self.cruise),
                 "sc": ("Smart Cruise", self.smart_cruise),
-                "b": ("Left BackUp ", self.back_turn_left()),
+                "b": ("Left BackUp ", self.back_turn_left),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
