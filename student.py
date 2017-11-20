@@ -285,12 +285,12 @@ class Piggy(pigo.Pigo):
     def back_turn_left(self):
         """Backs up and turns left simultaneously"""
         self.set_speed(60, 200)
-        self.encB(16)
+        self.encB(18)
 
     def back_turn_right(self):
         """Backs up and turns right"""
-        self.set_speed(200,80)
-        self.encB(15)
+        self.set_speed(200,60)
+        self.encB(18)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
@@ -305,15 +305,15 @@ class Piggy(pigo.Pigo):
                 time.sleep(.1)
             else:
                 print("\n----Something is blocking my path----\n")
-                self.right_turn()
-                self.encB(5)
+                self.back_turn_right()
+                self.smart_turn()
                 if self.is_clear():
                     self.smart_cruise()
                     time.sleep(.1)
                 else:
-                    self.left_turn()
+                    self.back_turn_left()
+                    self.smart_turn()
                     if self.is_clear():
-                        time.sleep(1)
                         self.smart_cruise()
                         time.sleep(.1)
 
