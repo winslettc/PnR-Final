@@ -51,6 +51,7 @@ class Piggy(pigo.Pigo):
                 #"s": ("Check status", self.status),
                 "tr": ("Test Restore Method", self.test_restore),
                 "c": ("Cruise", self.cruise),
+                "sc": ("Smart Cruise", self.smart_cruise),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -168,7 +169,7 @@ class Piggy(pigo.Pigo):
         self.encL(10)
         self.encR(10)
 
-    #END OF DANCE METHODS
+    #END OF DANCE METHODS##########################################################################################################
     #BEGINNING OF NAVIGATION METHODS
 
     def safety_check(self):
@@ -343,6 +344,30 @@ class Piggy(pigo.Pigo):
                 self.stop()
                 print("\n----I give up, it has been too long----\n")
             time.sleep(.2)
+
+    def smart_cruise(self):
+        """Cruise function that slows down as the robot approaches an object"""
+        MAX_SPEED = 200
+        MID_SPEED = 150
+        LOW_SPEED = 100
+        self.fwd()
+        while True:
+            dis = self.dist()
+            if dis < self.HARD_STOP_DIST:
+                print("\n----Hard stop triggered----\n")
+                break
+            elif dis > 200:
+                print("\n----Obstacle not near----\n")
+                self.set_speed(MAX_SPEED-5, MAX_SPEED)
+            elif dis > 100:
+                print("\n----Obstacle nearing----\n")
+                self.set_speed(MID_SPEED-4, MID_SPEED)
+            else:
+                print("\n----Obstacle very close----\n")
+                self.set_speed(LOW_SPEED-3, LOW_SPEED)
+            time.sleep(.1)  # just to slow down the loop a bit
+        self.stop()
+        self.set_speed(self.LEFT_SPEED, self.RIGHT_SPEED)
 
     def mid_scan(self, count=2):
         """moves servo 120 degrees and fills scan array, default count=2"""
