@@ -316,7 +316,7 @@ class Piggy(pigo.Pigo):
                 else:
                     print("\n----Something is blocking my path----\n")
                     self.smooth_turn()
-                    time.sleep(.1)
+                time.sleep(.1)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
@@ -348,6 +348,7 @@ class Piggy(pigo.Pigo):
             if self.dist() > 100:
                 self.stop()
                 print("\n----I think I have found a safe place to go!----\n")
+                self.cruise()
             elif datetime.datetime.utcnow() - start > datetime.timedelta(seconds = 15):
                 self.stop()
                 print("\n----I give up, it has been too long----\n")
