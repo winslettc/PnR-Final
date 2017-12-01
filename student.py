@@ -294,7 +294,7 @@ class Piggy(pigo.Pigo):
         """Backs up and turns right"""
         self.set_speed(200,60)
         for x in range(2):
-            self.encB(8)
+            self.encB(7)
 
     def nav(self):
         """auto pilots and attempts to maintain original heading"""
@@ -311,7 +311,7 @@ class Piggy(pigo.Pigo):
                 self.smart_turn()
                 time.sleep(.1)
                 if self.is_clear():
-                    self.cruise()
+                    self.smart_cruise()
                 else:
                     print("\n----Something is blocking my path----\n")
                     self.back_turn_right()
