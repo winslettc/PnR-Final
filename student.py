@@ -305,7 +305,6 @@ class Piggy(pigo.Pigo):
             if self.is_clear():
                 print("\n----The path is clear----\n")
                 self.cruise()
-                self.restore_heading()
                 time.sleep(.1)
             else:
                 print("\n----Something is blocking my path----\n")
@@ -313,7 +312,6 @@ class Piggy(pigo.Pigo):
                 time.sleep(.1)
                 if self.is_clear():
                     self.cruise()
-                    self.restore_heading()
                 else:
                     print("\n----Something is blocking my path----\n")
                     self.smooth_turn()
