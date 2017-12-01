@@ -352,6 +352,7 @@ class Piggy(pigo.Pigo):
                 self.stop()
                 print("\n----I give up, it has been too long----\n")
             time.sleep(.2)
+            self.stop()
 
     def smart_cruise(self):
         """Cruise function that slows down as the robot approaches an object"""
