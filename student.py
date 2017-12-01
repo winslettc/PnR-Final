@@ -303,7 +303,7 @@ class Piggy(pigo.Pigo):
         print("-----------! NAVIGATION ACTIVATED !------------\n")
         self.datetime()
         while True:
-            if self.is_clear():
+            if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----The path is clear----\n")
                 self.cruise()
                 time.sleep(.1)
@@ -311,12 +311,8 @@ class Piggy(pigo.Pigo):
                 print("\n----Something is blocking my path----\n")
                 self.smart_turn()
                 time.sleep(.1)
-                if self.is_clear():
+                if self.dist() > self.SAFE_STOP_DIST:
                     self.cruise()
-                else:
-                    print("\n----Something is blocking my path----\n")
-                    self.smooth_turn()
-                time.sleep(.1)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
