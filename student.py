@@ -310,7 +310,7 @@ class Piggy(pigo.Pigo):
             else:
                 print("\n----Something is blocking my path----\n")
                 self.encB(5)
-                self.right_turn()
+                self.encR(4)
                 if self.dist() > self.SAFE_STOP_DIST:
                     self.cruise()
                 else:
