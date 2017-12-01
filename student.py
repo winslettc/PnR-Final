@@ -213,6 +213,7 @@ class Piggy(pigo.Pigo):
             self.fwd()
             time.sleep(.1)
         else:
+            self.stop()
             print("\n----Cruising Stopped----\n")
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
