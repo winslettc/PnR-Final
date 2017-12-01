@@ -305,6 +305,7 @@ class Piggy(pigo.Pigo):
             if self.is_clear():
                 print("\n----The path is clear----\n")
                 self.smart_cruise()
+                self.restore_heading()
                 time.sleep(.1)
             else:
                 print("\n----Something is blocking my path----\n")
@@ -312,9 +313,10 @@ class Piggy(pigo.Pigo):
                 time.sleep(.1)
                 if self.is_clear():
                     self.smart_cruise()
+                    self.restore_heading()
                 else:
                     print("\n----Something is blocking my path----\n")
-                    self.back_turn_right()
+                    self.smooth_turn()
                     time.sleep(.1)
 
     def smart_turn(self):
@@ -347,7 +349,7 @@ class Piggy(pigo.Pigo):
             if self.dist() > 100:
                 self.stop()
                 print("\n----I think I have found a safe place to go!----\n")
-            elif datetime.datetime.utcnow() - start > datetime.timedelta(seconds = 10):
+            elif datetime.datetime.utcnow() - start > datetime.timedelta(seconds = 15):
                 self.stop()
                 print("\n----I give up, it has been too long----\n")
             time.sleep(.2)
