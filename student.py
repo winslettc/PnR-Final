@@ -315,6 +315,7 @@ class Piggy(pigo.Pigo):
                     self.cruise()
                 else:
                     self.smart_turn()
+                    self.servo(self.MIDPOINT)
 
 
     def smart_turn(self):
