@@ -309,10 +309,13 @@ class Piggy(pigo.Pigo):
                 time.sleep(.01)
             else:
                 print("\n----Something is blocking my path----\n")
-                self.smart_turn()
-                self.servo(self.MIDPOINT)
+                self.encB(5)
+                self.right_turn()
                 if self.dist() > self.SAFE_STOP_DIST:
                     self.cruise()
+                else:
+                    self.smart_turn()
+
 
     def smart_turn(self):
         """Find angle with greatest distance"""
