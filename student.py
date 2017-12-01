@@ -212,6 +212,8 @@ class Piggy(pigo.Pigo):
             print("\n----DRIVING, ready to go!----\n")
             self.fwd()
             time.sleep(.1)
+        else:
+            print("\n----Cruising Stopped----\n")
 
     #Counts obstacles in a 360 using right turns (90 degree angle)
     def full_count(self):
@@ -301,27 +303,19 @@ class Piggy(pigo.Pigo):
         self.datetime()
         while True:
             if self.is_clear():
-                self.smart_cruise()
-                self.smart_turn()
+                print("\n----The path is clear----\n")
                 self.smart_cruise()
                 time.sleep(.1)
             else:
                 print("\n----Something is blocking my path----\n")
-                self.back_turn_right()
-                if self.is_clear():
-                    self.smart_cruise()
                 self.smart_turn()
+                time.sleep(.1)
                 if self.is_clear():
-                    self.smart_cruise()
-                    time.sleep(.1)
+                    self.cruise()
                 else:
-                    self.back_turn_left()
-                    if self.is_clear():
-                        self.smart_cruise()
-                    self.smart_turn()
-                    if self.is_clear():
-                        self.smart_cruise()
-                        time.sleep(.1)
+                    print("\n----Something is blocking my path----\n")
+                    self.back_turn_right()
+                    time.sleep(.1)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
