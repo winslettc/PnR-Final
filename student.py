@@ -208,7 +208,7 @@ class Piggy(pigo.Pigo):
         print("\n----Aligning servo to Midpoint----\n")
         self.set_speed(120, 120)
         print("\n----Setting speed----\n")
-        if self.is_clear():
+        while self.is_clear():
             print("\n----DRIVING, ready to go!----\n")
             self.fwd()
             time.sleep(.1)
