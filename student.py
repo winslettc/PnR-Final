@@ -206,9 +206,9 @@ class Piggy(pigo.Pigo):
         """Drives robot forward while the coast is clear and scans continuously"""
         self.servo(self.MIDPOINT)
         print("\n----Aligning servo to Midpoint----\n")
-        self.set_speed(120, 123)
+        self.set_speed(120, 120)
         print("\n----Setting speed----\n")
-        while self.dist() > self.SAFE_STOP_DIST:
+        if self.is_clear():
             print("\n----DRIVING, ready to go!----\n")
             self.fwd()
             time.sleep(.1)
