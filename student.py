@@ -208,10 +208,10 @@ class Piggy(pigo.Pigo):
         print("\n----Aligning servo to Midpoint----\n")
         self.set_speed(120, 120)
         print("\n----Setting speed----\n")
-        while self.is_clear():
+        while self.dist() > self.SAFE_STOP_DIST:
             print("\n----DRIVING, ready to go!----\n")
             self.fwd()
-            time.sleep(.1)
+            time.sleep(.01)
         else:
             self.stop()
             print("\n----Cruising Stopped----\n")
