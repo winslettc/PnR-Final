@@ -306,11 +306,11 @@ class Piggy(pigo.Pigo):
             if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----The path is clear----\n")
                 self.cruise()
-                time.sleep(.1)
+                time.sleep(.01)
             else:
                 print("\n----Something is blocking my path----\n")
                 self.smart_turn()
-                time.sleep(.1)
+                self.servo(self.MIDPOINT)
                 if self.dist() > self.SAFE_STOP_DIST:
                     self.cruise()
 
