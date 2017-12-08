@@ -326,6 +326,7 @@ class Piggy(pigo.Pigo):
             if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----The path is clear----\n")
                 self.cruise()
+                self.restore_heading()
                 time.sleep(.01)
             else:
                 print ("\n----Rotating----\n")
