@@ -330,12 +330,13 @@ class Piggy(pigo.Pigo):
                 time.sleep(.01)
             else:
                 print ("\n----Rotating----\n")
-                while self.dist() < self.SAFE_STOP_DIST:
+                if self.dist() < self.SAFE_STOP_DIST:
                     self.encR(2)
                 else:
                     self.cruise()
+                    time.sleep(.01)
                     self.restore_heading()
-                    while self.dist() < self.SAFE_STOP_DIST:
+                    if self.dist() < self.SAFE_STOP_DIST:
                         self.encL(2)
                         self.cruise()
                         self.restore_heading()
