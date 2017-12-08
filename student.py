@@ -44,6 +44,7 @@ class Piggy(pigo.Pigo):
         ## This is a DICTIONARY, it's a list with custom index values
         # You may change the menu if you'd like to add an experimental method
         menu = {"n": ("Navigate forward", self.nav),
+                "n2": ("Navigate forward", self.nav_2),
                 "cs": ("Cupid Shuffle", self.cupid_shuffle),
                 #"b": ("Break dance", self.break_dance),
                 #"fc": ("Full Count", self.full_count),
@@ -52,7 +53,7 @@ class Piggy(pigo.Pigo):
                 "tr": ("Test Restore Method", self.test_restore),
                 "c": ("Cruise", self.cruise),
                 "sc": ("Smart Cruise", self.smart_cruise),
-                "b": ("Left BackUp ", self.back_turn_left),
+                #"b": ("Left BackUp ", self.back_turn_left),
                 "q": ("Quit", quit_now)
                 }
         # loop and print the menu...
@@ -317,6 +318,22 @@ class Piggy(pigo.Pigo):
                     self.smart_turn()
                     self.servo(self.MIDPOINT)
 
+    def nav_2(self):
+        """Autopilot and rotates in a circle until it finds free space"""
+        logging.debug("Starting Nav Method #2")
+        self.datetime()
+        while True:
+            if self.dist() > self.SAFE_STOP_DIST:
+                print("\n----The path is clear----\n")
+                self.cruise()
+                time.sleep(.01)
+            else:
+                print ("\n----Rotating----\n")
+                encR(2)
+                if self.dist() > self.SAFE_STOP_DIST:
+                    print("\n----The path is clear----\n")
+                    self.cruise()
+                    time.sleep(.01)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
