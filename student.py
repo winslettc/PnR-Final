@@ -329,11 +329,9 @@ class Piggy(pigo.Pigo):
                 time.sleep(.01)
             else:
                 print ("\n----Rotating----\n")
-                encR(2)
-                if self.dist() > self.SAFE_STOP_DIST:
-                    print("\n----The path is clear----\n")
-                    self.cruise()
-                    time.sleep(.01)
+                while self.dist() < self.SAFE_STOP_DIST:
+                    self.encR(2)
+                time.sleep(.01)
 
     def smart_turn(self):
         """Find angle with greatest distance"""
