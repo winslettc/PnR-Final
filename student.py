@@ -314,6 +314,7 @@ class Piggy(pigo.Pigo):
                 self.encR(4)
                 if self.dist() > self.SAFE_STOP_DIST:
                     self.cruise()
+                    self.restore_heading()
                 else:
                     self.smart_turn()
                     self.servo(self.MIDPOINT)
