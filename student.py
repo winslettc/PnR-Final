@@ -322,16 +322,24 @@ class Piggy(pigo.Pigo):
         """Autopilot and rotates in a circle until it finds free space"""
         logging.debug("Starting Nav Method #2")
         self.datetime()
+        self.servo(self.MIDPOINT)
         while True:
             if self.dist() > self.SAFE_STOP_DIST:
                 print("\n----The path is clear----\n")
                 self.cruise()
-                self.restore_heading()
                 time.sleep(.01)
             else:
                 print ("\n----Rotating----\n")
                 while self.dist() < self.SAFE_STOP_DIST:
                     self.encR(2)
+                else:
+                    self.cruise()
+                    self.restore_heading()
+                    while self.dist() < self.SAFE_STOP_DIST:
+                        self.encL(2)
+                        self.cruise()
+                        self.restore_heading()
+
                 time.sleep(.01)
 
     def smart_turn(self):
